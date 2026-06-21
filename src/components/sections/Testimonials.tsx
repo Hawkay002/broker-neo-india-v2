@@ -1,35 +1,41 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { testimonials } from "@/data";
 import { useState } from "react";
+import { Quote } from "lucide-react";
+import { ParticleField } from "@/components/Scene3D";
 
 export default function Testimonials() {
   const [active, setActive] = useState(0);
   const t = testimonials[active];
 
   return (
-    <section id="testimonials" className="bg-card border-b-[3px] border-foreground">
+    <section id="testimonials" className="bg-card border-b-[3px] border-foreground relative overflow-hidden">
+      {/* 3D Particle Accent - Bottom Left */}
+      <div className="absolute bottom-0 left-0 w-1/3 h-1/3 pointer-events-none z-0 opacity-40">
+        <ParticleField count={30} color="#2D2318" />
+      </div>
+
       {/* Header */}
-      <div className="border-b-[3px] border-foreground px-5 md:px-10 py-4 flex items-center gap-4">
+      <div className="border-b-[3px] border-foreground px-5 md:px-10 py-4 flex items-center gap-4 relative z-10">
         <span className="section-label text-muted-foreground">06 /</span>
         <h2 className="font-sans font-extrabold text-2xl md:text-3xl tracking-tight">What Clients Say</h2>
       </div>
 
-      <div className="flex flex-col lg:flex-row">
+      <div className="flex flex-col lg:flex-row relative z-10">
         {/* Left — main quote */}
         <div className="lg:flex-1 px-5 md:px-10 py-10 md:py-16 border-b-[3px] lg:border-b-0 lg:border-r-[3px] border-foreground flex flex-col justify-between">
-          {/* Quote icon — all same size, rotated 180° clockwise */}
-          <span
+          {/* Quote icon — large, rotated 180° */}
+          <Quote
             aria-hidden
-            className="block font-sans font-extrabold text-foreground/10 leading-none select-none mb-4 flex-shrink-0"
+            className="text-foreground/10 mb-4 flex-shrink-0"
             style={{
-              fontSize: "clamp(80px, 10vw, 110px)",
-              display: "block",
+              width: "clamp(80px, 10vw, 110px)",
+              height: "clamp(80px, 10vw, 110px)",
               transform: "rotate(180deg)",
               transformOrigin: "center",
             }}
-          >
-            &ldquo;
-          </span>
+            strokeWidth={2.5}
+          />
 
           <AnimatePresence mode="wait">
             <motion.div
@@ -55,7 +61,6 @@ export default function Testimonials() {
                 </div>
               </div>
 
-              {/* Stars */}
               <div className="flex gap-1">
                 {Array.from({ length: t.rating }).map((_, i) => (
                   <span key={i} className="text-primary text-base">★</span>
@@ -75,19 +80,19 @@ export default function Testimonials() {
                 i === active ? "bg-foreground text-card" : "bg-transparent hover:bg-muted"
               }`}
             >
-              {/* Miniature quote — all same size */}
-              <span
+              {/* Right-side quote mark — rotated 180° (mirrored closing-quote look) */}
+              <Quote
                 aria-hidden
-                className={`font-bold flex-shrink-0 leading-none select-none`}
+                className="flex-shrink-0"
                 style={{
-                  fontSize: "28px",
+                  width: "24px",
+                  height: "24px",
                   transform: "rotate(180deg)",
-                  display: "inline-block",
-                  color: i === active ? "hsl(14 56% 49%)" : "rgba(45,35,24,0.15)",
+                  transformOrigin: "center",
+                  color: i === active ? "hsl(14 56% 49%)" : "rgba(45,35,24,0.18)",
                 }}
-              >
-                &ldquo;
-              </span>
+                strokeWidth={2.5}
+              />
               <div className="flex flex-col gap-1 min-w-0">
                 <p className={`font-bold text-sm truncate ${i === active ? "text-card" : "text-foreground"}`}>
                   {item.name}

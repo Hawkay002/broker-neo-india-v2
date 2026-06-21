@@ -1,5 +1,7 @@
 import Navbar from "@/components/sections/Navbar";
 import Footer from "@/components/sections/Footer";
+import PageHero from "@/components/PageHero";
+import { Reveal, RevealGroup } from "@/components/Reveal";
 
 const LAST_UPDATED = "1 June 2025";
 
@@ -58,40 +60,34 @@ export default function PrivacyPage() {
   return (
     <div className="pt-[68px]">
       <Navbar />
-      <main className="bg-background min-h-screen">
-        {/* Hero */}
-        <section className="border-b-[3px] border-foreground">
-          <div className="border-b-[3px] border-foreground px-5 md:px-10 py-3 flex items-center justify-between flex-wrap gap-2">
-            <span className="section-label text-muted-foreground">Legal / Privacy Policy</span>
-            <span className="section-label text-muted-foreground">Last Updated: {LAST_UPDATED}</span>
-          </div>
-          <div className="px-5 md:px-10 py-10 md:py-14">
-            <h1 className="font-sans font-extrabold leading-tight tracking-tight mb-3" style={{ fontSize: "clamp(34px, 5vw, 64px)" }}>
-              Privacy Policy
-            </h1>
-            <p className="font-sans text-muted-foreground text-sm md:text-base leading-relaxed max-w-xl">
-              BRUT Realty Pvt. Ltd. is committed to protecting your personal data. This Policy is compliant with the Digital Personal Data Protection Act, 2023 (DPDPA) and applicable Indian regulations.
-            </p>
-          </div>
+      <main className="bg-background min-h-screen page-enter">
+        <PageHero
+          eyebrow="Legal / Privacy Policy"
+          title="Privacy"
+          highlight="Policy"
+          subtitle="How we handle your data with total transparency and strict compliance with DPDPA 2023."
+          crumb="Privacy Policy"
+        />
+
+        <section className="border-b-[3px] border-foreground px-5 md:px-10 py-12 md:py-16 max-w-4xl">
+          <RevealGroup stagger={0.08}>
+            <div className="flex flex-col gap-10 md:gap-12">
+              {SECTIONS.map((s) => (
+                <Reveal key={s.title} direction="up">
+                  <div className="flex flex-col gap-3 border-b border-foreground/10 pb-10 last:border-b-0">
+                    <h2 className="font-sans font-extrabold text-xl md:text-2xl tracking-tight">{s.title}</h2>
+                    {s.body.split("\n\n").map((para, i) => (
+                      <p key={i} className="font-sans text-muted-foreground text-sm leading-relaxed whitespace-pre-line">
+                        {para}
+                      </p>
+                    ))}
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          </RevealGroup>
         </section>
 
-        {/* Content */}
-        <section className="px-5 md:px-10 py-10 md:py-14 max-w-4xl">
-          <div className="flex flex-col gap-10 md:gap-12">
-            {SECTIONS.map((s) => (
-              <div key={s.title} className="flex flex-col gap-3 border-b border-foreground/10 pb-10">
-                <h2 className="font-sans font-bold text-lg md:text-xl">{s.title}</h2>
-                {s.body.split("\n\n").map((para, i) => (
-                  <p key={i} className="font-sans text-muted-foreground text-sm leading-relaxed whitespace-pre-line">
-                    {para}
-                  </p>
-                ))}
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Contact CTA */}
         <section className="border-t-[3px] border-foreground px-5 md:px-10 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-muted">
           <div>
             <p className="font-sans font-bold text-base mb-0.5">Questions about your privacy?</p>

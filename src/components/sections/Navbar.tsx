@@ -2,7 +2,19 @@ import { Menu, X } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 
-const NAV_ITEMS = ["Listings", "Gallery", "Brokers", "Process", "Contact"];
+// Section anchors scroll within the home page.
+// Page links route to dedicated pages (which scroll to top via ScrollToTop).
+type NavItem = { label: string; href: string; type: "section" | "page" };
+
+const NAV_ITEMS: NavItem[] = [
+  { label: "About Us", href: "/about", type: "page" },
+  { label: "Our Story", href: "/our-story", type: "page" },
+  { label: "Listings", href: "listings", type: "section" },
+  { label: "Gallery", href: "gallery", type: "section" },
+  { label: "Brokers", href: "brokers", type: "section" },
+  { label: "Process", href: "process", type: "section" },
+  { label: "Contact", href: "contact", type: "section" },
+];
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -16,25 +28,34 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Close menu on resize to desktop
   useEffect(() => {
     const onResize = () => { if (window.innerWidth >= 768) setOpen(false); };
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
-  // Prevent body scroll when mobile menu is open
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
   }, [open]);
 
-  const navHref = (item: string) =>
-    isHome ? `#${item.toLowerCase()}` : `/#${item.toLowerCase()}`;
+  // Resolve a nav item's destination.
+  // Page items go to their route (ScrollToTop handles the reset).
+  // Section items scroll within home, or jump home then scroll if elsewhere.
+  const resolveHref = (item: NavItem) => {
+    if (item.type === "page") return item.href;
+    if (isHome) return `#${item.href}`;
+    return `/#${item.href}`;
+  };
+
+  // Page items vs section items, with a separator between the two groups.
+  const pageItems = NAV_ITEMS.filter((i) => i.type === "page");
+  const sectionItems = NAV_ITEMS.filter((i) => i.type === "section");
+
+  const isActivePage = (href: string) => location === href || location === href + "/";
 
   return (
     <>
-      {/* Fixed header */}
       <header
         className={`fixed top-0 left-0 right-0 w-full z-50 bg-card border-b-[3px] border-foreground transition-all duration-200 ${
           scrolled ? "shadow-[0_4px_0_0_#2D2318]" : ""
@@ -54,14 +75,34 @@ export default function Navbar() {
 
           {/* Nav — desktop */}
           <nav className="hidden md:flex items-center gap-1">
-            {NAV_ITEMS.map((item) => (
+            {/* Page links (About Us, Our Story) */}
+            {pageItems.map((item) => (
+              <Link
+                key={item.label}
+                to={item.href}
+                className={`font-mono text-[11px] uppercase tracking-[0.2em] font-bold px-4 py-2 relative group ${
+                  isActivePage(item.href) ? "text-primary" : ""
+                }`}
+              >
+                <span className="relative z-10 transition-colors duration-150 group-hover:text-primary-foreground">
+                  {item.label}
+                </span>
+                <span className="absolute inset-0 bg-primary scale-x-0 group-hover:scale-x-100 transition-transform duration-250 origin-left" />
+              </Link>
+            ))}
+
+            {/* Separator */}
+            <span aria-hidden className="w-px h-4 bg-foreground/25 mx-1" />
+
+            {/* Section links */}
+            {sectionItems.map((item) => (
               <a
-                key={item}
-                href={navHref(item)}
+                key={item.label}
+                href={resolveHref(item)}
                 className="font-mono text-[11px] uppercase tracking-[0.2em] font-bold px-4 py-2 relative group"
               >
                 <span className="relative z-10 transition-colors duration-150 group-hover:text-primary-foreground">
-                  {item}
+                  {item.label}
                 </span>
                 <span className="absolute inset-0 bg-primary scale-x-0 group-hover:scale-x-100 transition-transform duration-250 origin-left" />
               </a>
@@ -72,7 +113,7 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-4">
             <span className="section-label text-muted-foreground hidden lg:block">Est. 2009 · Mumbai</span>
             <a
-              href={navHref("Contact")}
+              href={isHome ? "#contact" : "/#contact"}
               className="btn-fill-dark bg-primary text-primary-foreground px-5 py-2.5 font-bold border-2 border-foreground bs bs-hover uppercase tracking-widest text-xs cursor-pointer"
             >
               Book a Call
@@ -90,23 +131,35 @@ export default function Navbar() {
         </div>
       </header>
 
-      {/* Mobile fullscreen menu — separate from header so it covers viewport */}
+      {/* Mobile fullscreen menu */}
       {open && (
         <div className="fixed inset-0 z-40 bg-foreground flex flex-col pt-[68px]" style={{ overscrollBehavior: "contain" }}>
           <nav className="flex flex-col px-8 pt-10 gap-0 flex-1 overflow-y-auto">
-            {NAV_ITEMS.map((item, i) => (
-              <a
-                key={item}
-                href={navHref(item)}
-                className="font-sans font-extrabold text-[clamp(36px,10vw,52px)] uppercase text-card hover:text-primary transition-colors py-3 border-b border-card/10"
-                style={{ transitionDelay: `${i * 30}ms` }}
-                onClick={() => setOpen(false)}
-              >
-                {item}
-              </a>
-            ))}
+            {NAV_ITEMS.map((item, i) =>
+              item.type === "page" ? (
+                <Link
+                  key={item.label}
+                  to={item.href}
+                  className="font-sans font-extrabold text-[clamp(36px,10vw,52px)] uppercase text-card hover:text-primary transition-colors py-3 border-b border-card/10"
+                  style={{ transitionDelay: `${i * 30}ms` }}
+                  onClick={() => setOpen(false)}
+                >
+                  {item.label}
+                </Link>
+              ) : (
+                <a
+                  key={item.label}
+                  href={resolveHref(item)}
+                  className="font-sans font-extrabold text-[clamp(36px,10vw,52px)] uppercase text-card hover:text-primary transition-colors py-3 border-b border-card/10"
+                  style={{ transitionDelay: `${i * 30}ms` }}
+                  onClick={() => setOpen(false)}
+                >
+                  {item.label}
+                </a>
+              )
+            )}
             <a
-              href={navHref("Contact")}
+              href={isHome ? "#contact" : "/#contact"}
               className="btn-fill-dark mt-8 bg-primary text-primary-foreground px-6 py-4 font-bold border-2 border-primary-foreground/20 uppercase tracking-widest text-sm text-left inline-block cursor-pointer"
               onClick={() => setOpen(false)}
             >
@@ -114,7 +167,6 @@ export default function Navbar() {
             </a>
           </nav>
 
-          {/* Bottom info strip */}
           <div className="px-8 py-5 border-t border-card/10 flex items-center justify-between flex-shrink-0">
             <span className="section-label text-card/25">Est. 2009 · Mumbai</span>
             <span className="section-label text-primary">RERA Registered</span>

@@ -1,25 +1,40 @@
 import { motion } from "framer-motion";
+import { Hero3D } from "@/components/Scene3D";
 
 const fadeUp = { hidden: { opacity: 0, y: 28 }, show: { opacity: 1, y: 0 } };
 const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.09 } } };
 
 export default function Hero() {
   return (
-    <section id="hero" className="min-h-[100svh] bg-background border-b-[3px] border-foreground relative overflow-hidden flex flex-col">
+    <section id="hero" className="min-h-[100svh] border-b-[3px] border-foreground relative overflow-hidden flex flex-col">
       {/* Top rule */}
-      <div className="border-b-[3px] border-foreground px-5 md:px-10 py-3 flex items-center justify-between flex-shrink-0">
+      <div className="border-b-[3px] border-foreground px-5 md:px-10 py-3 flex items-center justify-between flex-shrink-0 bg-card">
         <span className="section-label text-muted-foreground">Mumbai's Premier Real Estate Agency</span>
         <span className="section-label text-muted-foreground hidden md:block">Est. 2009 · BOM</span>
       </div>
 
       <div className="flex flex-col lg:flex-row flex-1 min-h-0">
-        {/* ── Left panel ── */}
-        <div className="flex flex-col justify-between px-5 md:px-10 py-8 md:py-12 lg:w-[52%] xl:w-[55%] border-b-[3px] lg:border-b-0 lg:border-r-[3px] border-foreground">
-          <motion.div variants={stagger} initial="hidden" animate="show">
+        {/* ── Left panel — terracotta "THE REAL DEAL" ── */}
+        <div className="relative flex flex-col justify-between px-5 md:px-10 py-8 md:py-12 lg:w-[52%] xl:w-[55%] border-b-[3px] lg:border-b-0 lg:border-r-[3px] border-foreground bg-primary text-primary-foreground overflow-hidden">
+          {/* 3D accent — top right of panel */}
+          <div className="absolute top-0 right-0 w-[42%] h-[42%] max-w-[340px] max-h-[340px] pointer-events-none opacity-90">
+            <Hero3D className="w-full h-full" />
+          </div>
+
+          {/* Faded "MUMB" watermark — bottom of the panel */}
+          <span
+            aria-hidden
+            className="watermark absolute -bottom-6 md:-bottom-10 left-0 right-0 text-center select-none"
+            style={{ fontSize: "clamp(120px, 24vw, 280px)" }}
+          >
+            MUMB
+          </span>
+
+          <motion.div variants={stagger} initial="hidden" animate="show" className="relative z-10">
             {/* Stamp */}
             <motion.div variants={fadeUp} className="mb-6 inline-flex">
-              <div className="stamp w-14 h-14 md:w-16 md:h-16 rounded-full border-[3px] border-primary flex flex-col items-center justify-center">
-                <p className="font-mono font-bold text-primary leading-tight text-center" style={{ fontSize: "8px", letterSpacing: "0.18em" }}>
+              <div className="stamp w-14 h-14 md:w-16 md:h-16 rounded-full border-[3px] border-primary-foreground flex flex-col items-center justify-center">
+                <p className="font-mono font-bold text-primary-foreground leading-tight text-center" style={{ fontSize: "8px", letterSpacing: "0.18em" }}>
                   BRUT<br />MUM
                 </p>
               </div>
@@ -32,12 +47,12 @@ export default function Hero() {
               style={{ fontSize: "clamp(52px, 11vw, 130px)" }}
             >
               THE<br />
-              <span className="stroke">REAL</span><br />
+              <span style={{ WebkitTextStroke: "2.5px rgba(248,245,240,0.85)", color: "transparent" }}>REAL</span><br />
               DEAL.
             </motion.h1>
 
             {/* Sub-copy */}
-            <motion.p variants={fadeUp} className="font-sans text-base md:text-lg text-muted-foreground max-w-md mb-8 leading-relaxed">
+            <motion.p variants={fadeUp} className="font-sans text-base md:text-lg text-primary-foreground/85 max-w-md mb-8 leading-relaxed">
               Mumbai's most direct real estate firm. Premium properties in Worli, Bandra, Juhu, and Malabar Hill — no fluff, just results.
             </motion.p>
 
@@ -45,13 +60,13 @@ export default function Hero() {
             <motion.div variants={fadeUp} className="flex flex-wrap gap-3 mb-10 md:mb-0">
               <a
                 href="#listings"
-                className="btn-fill-primary-on-dark bg-foreground text-card px-6 py-3.5 font-bold border-2 border-foreground bs bs-cream-hover uppercase tracking-widest text-xs cursor-pointer inline-flex items-center gap-2"
+                className="btn-fill-dark-on-light bg-primary-foreground text-foreground px-6 py-3.5 font-bold border-2 border-foreground bs bs-hover uppercase tracking-widest text-xs cursor-pointer inline-flex items-center gap-2"
               >
                 See Listings <span className="text-primary">↗</span>
               </a>
               <a
                 href="#brokers"
-                className="btn-fill-primary bg-transparent text-foreground px-6 py-3.5 font-bold border-2 border-foreground/40 uppercase tracking-widest text-xs cursor-pointer inline-block"
+                className="btn-fill-primary-on-dark bg-transparent text-primary-foreground px-6 py-3.5 font-bold border-2 border-primary-foreground/40 uppercase tracking-widest text-xs cursor-pointer inline-block"
               >
                 Meet the Team
               </a>
@@ -63,7 +78,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.55, duration: 0.5 }}
-            className="flex gap-6 md:gap-10 border-t-[2px] border-foreground/20 pt-6 mt-6"
+            className="relative z-10 flex gap-6 md:gap-10 border-t-[2px] border-primary-foreground/20 pt-6 mt-6"
           >
             {[
               { value: "500+", label: "Properties Sold" },
@@ -72,7 +87,7 @@ export default function Hero() {
             ].map((s) => (
               <div key={s.label}>
                 <p className="font-sans font-extrabold text-xl md:text-2xl tracking-tight">{s.value}</p>
-                <p className="section-label text-muted-foreground mt-0.5">{s.label}</p>
+                <p className="section-label text-primary-foreground/70 mt-0.5">{s.label}</p>
               </div>
             ))}
           </motion.div>
@@ -80,31 +95,45 @@ export default function Hero() {
 
         {/* ── Right panel — hero image ── */}
         <div className="lg:flex-1 relative min-h-[320px] lg:min-h-0 overflow-hidden">
+          {/* Black vertical bar (left edge of right panel) for the side label — runs top to bottom */}
+          <div className="vbar-dark absolute left-0 top-0 bottom-0 w-[44px] hidden lg:flex items-center justify-center z-20">
+            <div className="flex items-center gap-1.5" style={{ writingMode: "vertical-rl" }}>
+              <div className="w-px h-10 bg-card/30" />
+              <span className="font-mono text-[10px] text-card/60 tracking-[0.25em] uppercase">Mumbai's Finest Residences</span>
+            </div>
+          </div>
+
           <motion.img
-            src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=1200&q=85"
+            src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=1400&q=85"
             alt="Luxury Mumbai penthouse interior"
             className="absolute inset-0 w-full h-full object-cover"
             initial={{ scale: 1.06, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.9, ease: "easeOut" }}
           />
-          {/* Dark gradient overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 via-foreground/10 to-transparent" />
 
-          {/* Featured listing card */}
+          {/* Featured listing card — wider */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.6, duration: 0.5 }}
-            className="absolute bottom-5 left-5 right-5 md:bottom-8 md:left-8 md:right-auto bg-foreground text-card p-4 md:p-5 max-w-xs border-2 border-primary"
+            className="absolute bottom-5 left-5 right-5 md:bottom-8 md:left-8 md:right-auto md:w-[400px] bg-foreground text-card p-4 md:p-5 border-2 border-primary"
           >
             <p className="section-label text-primary mb-1.5">Featured Listing</p>
-            <p className="font-sans font-bold text-base leading-tight mb-1">The Worli Sea Face Penthouse</p>
+            <p className="font-sans font-bold text-lg leading-tight mb-1">The Worli Sea Face Penthouse</p>
             <p className="font-mono text-xs text-card/50 mb-3">Worli, Mumbai</p>
+            <div className="flex items-center gap-3 font-mono text-[11px] text-card/60 mb-3">
+              <span>4 Bed</span>
+              <span className="text-card/20">·</span>
+              <span>4.5 Bath</span>
+              <span className="text-card/20">·</span>
+              <span>4,200 sq.ft.</span>
+            </div>
             <div className="flex items-center justify-between">
-              <span className="font-mono font-bold text-base text-primary">₹8,50,000<span className="text-card/40 font-normal text-xs">/mo</span></span>
+              <span className="font-mono font-bold text-lg text-primary">₹8,50,000<span className="text-card/40 font-normal text-xs">/mo</span></span>
               <a
-                href="#listings"
+                href="/listings/worli-sea-face-penthouse"
                 className="btn-fill-dark font-mono text-[10px] uppercase tracking-[0.2em] font-bold bg-primary text-primary-foreground px-3 py-1.5 border border-primary-foreground/20 cursor-pointer inline-block"
               >
                 View →
@@ -112,14 +141,8 @@ export default function Hero() {
             </div>
           </motion.div>
 
-          {/* Vertical edge label */}
-          <div className="absolute top-1/2 right-4 -translate-y-1/2 hidden lg:flex items-center gap-1.5" style={{ writingMode: "vertical-rl" }}>
-            <div className="w-px h-10 bg-card/30" />
-            <span className="font-mono text-[10px] text-card/40 tracking-[0.25em] uppercase">Mumbai's Finest Residences</span>
-          </div>
-
           {/* Corner marker */}
-          <div className="absolute top-4 right-4 w-6 h-6 border-t-2 border-r-2 border-card/30 hidden md:block" />
+          <div className="absolute top-4 right-4 w-6 h-6 border-t-2 border-r-2 border-card/30 hidden md:block z-10" />
         </div>
       </div>
     </section>

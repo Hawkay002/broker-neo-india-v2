@@ -1,5 +1,7 @@
 import Navbar from "@/components/sections/Navbar";
 import Footer from "@/components/sections/Footer";
+import PageHero from "@/components/PageHero";
+import { Reveal, RevealGroup } from "@/components/Reveal";
 
 const FEATURES = [
   { title: "Keyboard Navigation", body: "All interactive elements are accessible via keyboard. Use Tab to move between elements and Enter/Space to activate." },
@@ -14,78 +16,81 @@ export default function AccessibilityPage() {
   return (
     <div className="pt-[68px]">
       <Navbar />
-      <main className="bg-background min-h-screen">
-        <section className="border-b-[3px] border-foreground">
-          <div className="border-b-[3px] border-foreground px-5 md:px-10 py-3">
-            <span className="section-label text-muted-foreground">Legal / Accessibility</span>
-          </div>
-          <div className="px-5 md:px-10 py-10 md:py-14">
-            <h1 className="font-sans font-extrabold leading-tight tracking-tight mb-3" style={{ fontSize: "clamp(34px, 5vw, 64px)" }}>
-              Accessibility Statement
-            </h1>
-            <p className="font-sans text-muted-foreground text-sm md:text-base leading-relaxed max-w-xl">
-              BRUT Realty is committed to ensuring brutrealty.in is accessible to all users, including those with disabilities. We aim to conform to WCAG 2.1 Level AA.
-            </p>
-          </div>
-        </section>
+      <main className="bg-background min-h-screen page-enter">
+        <PageHero
+          eyebrow="Legal / Accessibility"
+          title="Accessibility"
+          highlight="Statement"
+          subtitle="Our commitment to ensuring brutrealty.in is accessible to all users, regardless of ability."
+          crumb="Accessibility"
+        />
 
-        <section className="border-b-[3px] border-foreground px-5 md:px-10 py-10 md:py-14 max-w-4xl">
-          <div className="flex flex-col gap-8">
-            <div className="flex flex-col gap-3 border-b border-foreground/10 pb-8">
-              <h2 className="font-sans font-bold text-lg md:text-xl">Our Commitment</h2>
-              <p className="font-sans text-muted-foreground text-sm leading-relaxed">
-                We believe everyone deserves equal access to property information and services. We continually evaluate our website against WCAG 2.1 success criteria and work to remediate any issues found.
-              </p>
-            </div>
+        <section className="border-b-[3px] border-foreground px-5 md:px-10 py-12 md:py-16 max-w-4xl">
+          <RevealGroup stagger={0.08}>
+            <div className="flex flex-col gap-12">
+              <Reveal direction="up">
+                <div className="flex flex-col gap-3">
+                  <h2 className="font-sans font-extrabold text-2xl tracking-tight">Our Commitment</h2>
+                  <p className="font-sans text-muted-foreground text-sm leading-relaxed">
+                    We believe everyone deserves equal access to property information and services. We continually evaluate our website against WCAG 2.1 success criteria and work to remediate any issues found.
+                  </p>
+                </div>
+              </Reveal>
 
-            <div className="flex flex-col gap-3 border-b border-foreground/10 pb-8">
-              <h2 className="font-sans font-bold text-lg md:text-xl">Accessibility Features</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-                {FEATURES.map((f) => (
-                  <div key={f.title} className="border-2 border-foreground/15 bg-card p-4">
-                    <h3 className="font-sans font-bold text-sm mb-1.5">{f.title}</h3>
-                    <p className="font-sans text-muted-foreground text-sm leading-relaxed">{f.body}</p>
+              <Reveal direction="up">
+                <div className="flex flex-col gap-3">
+                  <h2 className="font-sans font-extrabold text-2xl tracking-tight mb-4">Accessibility Features</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {FEATURES.map((f) => (
+                      <div key={f.title} className="border-2 border-foreground/15 bg-card p-4 flex flex-col gap-2 bs">
+                        <h3 className="font-sans font-bold text-sm">{f.title}</h3>
+                        <p className="font-sans text-muted-foreground text-xs leading-relaxed">{f.body}</p>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            </div>
+                </div>
+              </Reveal>
 
-            <div className="flex flex-col gap-3 border-b border-foreground/10 pb-8">
-              <h2 className="font-sans font-bold text-lg md:text-xl">Known Limitations</h2>
-              <p className="font-sans text-muted-foreground text-sm leading-relaxed">
-                Our embedded map (powered by OpenStreetMap/Leaflet) may not be fully accessible to all screen reader users. If you need help locating our office, please call us at +91 22 4567 8900 and we will assist you directly.
-              </p>
-            </div>
+              <Reveal direction="up">
+                <div className="flex flex-col gap-3">
+                  <h2 className="font-sans font-extrabold text-2xl tracking-tight">Known Limitations</h2>
+                  <p className="font-sans text-muted-foreground text-sm leading-relaxed">
+                    Our embedded map may not be fully accessible to all screen reader users. If you need help locating our office, please call us at +91 22 4567 8900 and we will assist you directly.
+                  </p>
+                </div>
+              </Reveal>
 
-            <div className="flex flex-col gap-3 border-b border-foreground/10 pb-8">
-              <h2 className="font-sans font-bold text-lg md:text-xl">Technical Standards</h2>
-              <p className="font-sans text-muted-foreground text-sm leading-relaxed">
-                This website is built with React and uses semantic HTML5, WAI-ARIA 1.2 roles and properties, and follows WCAG 2.1 Level AA guidelines to the best of our ability. We test using manual keyboard navigation, axe-core automated testing, and VoiceOver on macOS and iOS.
-              </p>
-            </div>
+              <Reveal direction="up">
+                <div className="flex flex-col gap-3">
+                  <h2 className="font-sans font-extrabold text-2xl tracking-tight">Technical Standards</h2>
+                  <p className="font-sans text-muted-foreground text-sm leading-relaxed">
+                    This website is built with React and uses semantic HTML5, WAI-ARIA 1.2 roles and properties, and follows WCAG 2.1 Level AA guidelines. We test using manual keyboard navigation and axe-core automated testing.
+                  </p>
+                </div>
+              </Reveal>
 
-            <div className="flex flex-col gap-3">
-              <h2 className="font-sans font-bold text-lg md:text-xl">Feedback & Contact</h2>
-              <p className="font-sans text-muted-foreground text-sm leading-relaxed">
-                If you experience any accessibility barriers or have suggestions for improvement, please contact us:
-              </p>
-              <div className="flex flex-col gap-2 mt-1">
-                {[
-                  { label: "Email", value: "accessibility@brutrealty.in" },
-                  { label: "Phone", value: "+91 22 4567 8900 (Mon–Sat, 9am–6pm IST)" },
-                  { label: "Post", value: "Level 28, One World Center, S.B. Marg, Lower Parel West, Mumbai 400 013" },
-                ].map(({ label, value }) => (
-                  <div key={label} className="flex gap-3 items-start text-sm">
-                    <span className="section-label text-muted-foreground w-14 flex-shrink-0 pt-0.5">{label}</span>
-                    <span className="font-sans text-foreground">{value}</span>
+              <Reveal direction="up">
+                <div className="flex flex-col gap-3">
+                  <h2 className="font-sans font-extrabold text-2xl tracking-tight">Feedback & Contact</h2>
+                  <p className="font-sans text-muted-foreground text-sm leading-relaxed mb-4">
+                    If you experience any accessibility barriers or have suggestions for improvement, please contact us:
+                  </p>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    {[
+                      { label: "Email", value: "accessibility@brutrealty.in" },
+                      { label: "Phone", value: "+91 22 4567 8900" },
+                      { label: "Post", value: "One World Center, Mumbai" },
+                    ].map(({ label, value }) => (
+                      <div key={label} className="border-2 border-foreground/15 p-3 bg-card">
+                        <span className="section-label text-muted-foreground block mb-1">{label}</span>
+                        <span className="font-sans font-bold text-xs">{value}</span>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-              <p className="font-sans text-muted-foreground text-sm leading-relaxed mt-2">
-                We aim to respond to all accessibility feedback within 5 business days.
-              </p>
+                </div>
+              </Reveal>
             </div>
-          </div>
+          </RevealGroup>
         </section>
 
         <section className="border-t-[3px] border-foreground px-5 md:px-10 py-6 bg-muted flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">

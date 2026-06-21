@@ -1,5 +1,7 @@
 import Navbar from "@/components/sections/Navbar";
 import Footer from "@/components/sections/Footer";
+import PageHero from "@/components/PageHero";
+import { Reveal, RevealGroup } from "@/components/Reveal";
 
 const LAST_UPDATED = "1 June 2025";
 
@@ -70,59 +72,34 @@ export default function TermsPage() {
   return (
     <div className="pt-[68px]">
       <Navbar />
-      <main className="bg-background min-h-screen">
-        {/* Hero */}
-        <section className="border-b-[3px] border-foreground">
-          <div className="border-b-[3px] border-foreground px-5 md:px-10 py-3 flex items-center justify-between flex-wrap gap-2">
-            <span className="section-label text-muted-foreground">Legal / Terms of Service</span>
-            <span className="section-label text-muted-foreground">Last Updated: {LAST_UPDATED}</span>
-          </div>
-          <div className="px-5 md:px-10 py-10 md:py-14">
-            <h1 className="font-sans font-extrabold leading-tight tracking-tight mb-3" style={{ fontSize: "clamp(34px, 5vw, 64px)" }}>
-              Terms of Service
-            </h1>
-            <p className="font-sans text-muted-foreground text-sm md:text-base leading-relaxed max-w-xl">
-              These Terms govern your use of BRUT Realty's website and services. They are compliant with the Indian Contract Act 1872, RERA 2016, and applicable Maharashtra regulations.
-            </p>
-          </div>
+      <main className="bg-background min-h-screen page-enter">
+        <PageHero
+          eyebrow="Legal / Terms of Service"
+          title="Terms of"
+          highlight="Service"
+          subtitle="These Terms govern your use of BRUT Realty's website and services, compliant with the Indian Contract Act and RERA."
+          crumb="Terms of Service"
+        />
+
+        <section className="border-b-[3px] border-foreground px-5 md:px-10 py-12 md:py-16 max-w-4xl">
+          <RevealGroup stagger={0.08}>
+            <div className="flex flex-col gap-10 md:gap-12">
+              {SECTIONS.map((s) => (
+                <Reveal key={s.title} direction="up">
+                  <div className="flex flex-col gap-3 border-b border-foreground/10 pb-10 last:border-b-0">
+                    <h2 className="font-sans font-extrabold text-xl md:text-2xl tracking-tight">{s.title}</h2>
+                    {s.body.split("\n\n").map((para, i) => (
+                      <p key={i} className="font-sans text-muted-foreground text-sm leading-relaxed whitespace-pre-line">
+                        {para}
+                      </p>
+                    ))}
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          </RevealGroup>
         </section>
 
-        {/* Quick navigation */}
-        <section className="border-b-[3px] border-foreground px-5 md:px-10 py-5 overflow-x-auto">
-          <div className="flex gap-3 whitespace-nowrap">
-            {SECTIONS.slice(0, 8).map((s) => (
-              <a
-                key={s.title}
-                href={`#${s.title.split(".")[0].replace(/\s/g, "")}`}
-                className="font-mono text-[10px] font-bold uppercase tracking-[0.15em] px-3 py-1.5 border-2 border-foreground/20 hover:border-primary hover:text-primary transition-colors duration-150 flex-shrink-0 cursor-pointer"
-              >
-                {s.title}
-              </a>
-            ))}
-          </div>
-        </section>
-
-        {/* Content */}
-        <section className="px-5 md:px-10 py-10 md:py-14 max-w-4xl">
-          <div className="flex flex-col gap-10 md:gap-12">
-            {SECTIONS.map((s) => (
-              <div
-                key={s.title}
-                id={s.title.split(".")[0].replace(/\s/g, "")}
-                className="flex flex-col gap-3 border-b border-foreground/10 pb-10"
-              >
-                <h2 className="font-sans font-bold text-lg md:text-xl">{s.title}</h2>
-                {s.body.split("\n\n").map((para, i) => (
-                  <p key={i} className="font-sans text-muted-foreground text-sm leading-relaxed whitespace-pre-line">
-                    {para}
-                  </p>
-                ))}
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Contact CTA */}
         <section className="border-t-[3px] border-foreground px-5 md:px-10 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-muted">
           <div>
             <p className="font-sans font-bold text-base mb-0.5">Legal queries?</p>

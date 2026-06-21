@@ -1,28 +1,28 @@
 import { Link } from "wouter";
+import { Instagram, Linkedin, Twitter, Youtube } from "lucide-react";
 
 const YEAR = new Date().getFullYear();
 
 const COMPANY = [
   { label: "About Us", href: "/about" },
-  { label: "Our Story", href: "/about#story" },
+  { label: "Our Story", href: "/our-story" },
   { label: "Careers", href: "/careers" },
-  { label: "Press", href: "/press" },
 ];
 
 const SERVICES = [
-  { label: "Premium Rentals", href: "/#listings" },
-  { label: "Property Purchase", href: "/#listings" },
-  { label: "Off-Market Deals", href: "/#contact" },
-  { label: "Investment Consulting", href: "/#contact" },
+  { label: "Premium Rentals", href: "/services/premium-rentals" },
+  { label: "Property Purchase", href: "/services/property-purchase" },
+  { label: "Off-Market Deals", href: "/services/off-market-deals" },
+  { label: "Investment Consulting", href: "/services/investment-consulting" },
 ];
 
 const NEIGHBOURHOODS = [
-  { label: "Worli", href: "/#listings" },
-  { label: "Bandra West", href: "/#listings" },
-  { label: "Malabar Hill", href: "/#listings" },
-  { label: "Lower Parel", href: "/#listings" },
-  { label: "Juhu", href: "/#listings" },
-  { label: "Powai", href: "/#listings" },
+  { label: "Worli", href: "/neighbourhoods/worli" },
+  { label: "Bandra West", href: "/neighbourhoods/bandra-west" },
+  { label: "Malabar Hill", href: "/neighbourhoods/malabar-hill" },
+  { label: "Lower Parel", href: "/neighbourhoods/lower-parel" },
+  { label: "Juhu", href: "/neighbourhoods/juhu" },
+  { label: "Powai", href: "/neighbourhoods/powai" },
 ];
 
 const LEGAL = [
@@ -31,17 +31,24 @@ const LEGAL = [
   { label: "Accessibility", href: "/accessibility" },
 ];
 
+const SOCIAL = [
+  { icon: Instagram, label: "Instagram", href: "https://instagram.com/brutrealty" },
+  { icon: Linkedin, label: "LinkedIn", href: "https://linkedin.com/company/brutrealty" },
+  { icon: Twitter, label: "X (Twitter)", href: "https://x.com/brutrealty" },
+  { icon: Youtube, label: "YouTube", href: "https://youtube.com/@brutrealty" },
+];
+
 function FooterLink({ href, label }: { href: string; label: string }) {
   const isInternal = href.startsWith("/") && !href.startsWith("/#");
   if (isInternal) {
     return (
-      <Link to={href} className="font-sans text-sm text-card/55 hover:text-primary transition-colors duration-150 cursor-pointer block py-0.5">
+      <Link to={href} className="font-sans text-sm text-card/55 hover:text-primary transition-colors duration-150 cursor-pointer block py-0.5 link-underline">
         {label}
       </Link>
     );
   }
   return (
-    <a href={href} className="font-sans text-sm text-card/55 hover:text-primary transition-colors duration-150 cursor-pointer block py-0.5">
+    <a href={href} className="font-sans text-sm text-card/55 hover:text-primary transition-colors duration-150 cursor-pointer block py-0.5 link-underline">
       {label}
     </a>
   );
@@ -94,6 +101,22 @@ export default function Footer() {
             ))}
           </div>
           <p className="section-label text-card/20 mt-2">MahaRERA Reg. No.<br />P51800028099</p>
+
+          {/* Social icons */}
+          <div className="flex gap-3 mt-3">
+            {SOCIAL.map(({ icon: Icon, label, href }) => (
+              <a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={label}
+                className="w-9 h-9 border border-card/20 flex items-center justify-center text-card/40 hover:text-primary hover:border-primary transition-colors cursor-pointer"
+              >
+                <Icon className="w-4 h-4" />
+              </a>
+            ))}
+          </div>
         </div>
 
         {/* Company */}
