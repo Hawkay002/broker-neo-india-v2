@@ -9,6 +9,8 @@ const CATEGORIES: { key: PortfolioCategory | "All"; label: string }[] = [
   { key: "Amenities", label: "Amenities" },
 ];
 
+const EASE_SPRING = [0.22, 1, 0.36, 1] as const;
+
 function PortfolioItem({
   img,
   index,
@@ -19,8 +21,8 @@ function PortfolioItem({
   category: PortfolioCategory | "All";
 }) {
   const [loaded, setLoaded] = useState(false);
+  const [hovered, setHovered] = useState(false);
 
-  // Vary aspect ratio per category for visual interest
   const aspectMap: Record<string, string> = {
     Interior: "3/4",
     Exterior: "4/3",
@@ -37,34 +39,49 @@ function PortfolioItem({
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.97 }}
       transition={{ duration: 0.45, delay: index * 0.05 }}
-      className={`relative overflow-hidden group border-b-[3px] md:border-b-0 ${
+      onHoverStart={() => setHovered(true)}
+      onHoverEnd={() => setHovered(false)}
+      className={`relative overflow-hidden border-b-[3px] md:border-b-0 ${
         index % 3 === 2 ? "md:border-r-0" : "md:border-r-[3px] border-r-[3px]"
       } border-foreground cursor-pointer`}
       style={{ aspectRatio: aspectMap[currentCat] || "4/3" }}
     >
       {!loaded && <div className="absolute inset-0 img-placeholder" />}
-      <img
+      <motion.img
         src={img.src}
         alt={img.label}
         onLoad={() => setLoaded(true)}
-        className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.08] ${
-          loaded ? "opacity-100" : "opacity-0"
-        }`}
+        animate={{ scale: hovered ? 1.08 : 1 }}
+        transition={{ duration: 0.5, ease: EASE_SPRING }}
+        className={`w-full h-full object-cover ${loaded ? "opacity-100" : "opacity-0"}`}
+        style={{ willChange: "transform" }}
       />
-      {/* Slide-reveal overlay — label slides up from bottom on hover */}
-      <div className="gallery-overlay absolute inset-0 bg-gradient-to-t from-foreground/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3 md:p-4 pointer-events-none">
-        <div
-          className="gallery-label translate-y-full group-hover:translate-y-0 transition-transform"
-          style={{ transitionDuration: "400ms", transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)", willChange: "transform" }}
+
+      {/* Slide-reveal overlay — fades in on hover */}
+      <motion.div
+        className="gallery-overlay absolute inset-0 bg-gradient-to-t from-foreground/60 via-transparent to-transparent flex flex-col justify-end p-3 md:p-4 pointer-events-none"
+        animate={{ opacity: hovered ? 1 : 0 }}
+        initial={{ opacity: 0 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+        style={{ willChange: "opacity" }}
+      >
+        {/* Label slides up from bottom */}
+        <motion.div
+          className="gallery-label"
+          animate={{ y: hovered ? 0 : "100%" }}
+          initial={{ y: "100%" }}
+          transition={{ duration: 0.4, ease: EASE_SPRING }}
+          style={{ willChange: "transform" }}
         >
           <span className="bg-primary text-primary-foreground font-mono text-[9px] font-bold uppercase tracking-[0.18em] px-2 py-0.5 block w-fit mb-1">
             {img.category}
           </span>
           <p className="text-card font-bold text-xs md:text-sm leading-tight">{img.label}</p>
           <p className="text-card/60 font-mono text-[9px] uppercase tracking-[0.15em] mt-0.5">{img.property}</p>
-        </div>
-      </div>
-      {/* Category tag — always visible as small pill */}
+        </motion.div>
+      </motion.div>
+
+      {/* Category tag — always visible */}
       <div className="absolute top-3 left-3 z-10">
         <span className="bg-foreground/70 text-card font-mono text-[8px] font-bold uppercase tracking-[0.15em] px-2 py-0.5 backdrop-blur-sm">
           {img.category}
@@ -76,7 +93,6 @@ function PortfolioItem({
 
 export default function Gallery() {
   const [active, setActive] = useState<PortfolioCategory | "All">("All");
-  const [loaded, setLoaded] = useState<Record<number, boolean>>({});
 
   const filtered = active === "All" ? portfolio : portfolio.filter((img) => img.category === active);
 
@@ -113,7 +129,7 @@ export default function Gallery() {
         ))}
       </div>
 
-      {/* Masonry-style grid — AnimatePresence for smooth category switching */}
+      {/* Grid */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-0 border-b-[3px] border-foreground">
         <AnimatePresence mode="popLayout">
           {filtered.map((img, i) => (
