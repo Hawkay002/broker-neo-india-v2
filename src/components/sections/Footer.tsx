@@ -138,26 +138,28 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Bottom bar — BRUT । MUMBAI watermark as background overlay */}
-      <div className="border-t-[3px] border-card/10 px-5 md:px-10 py-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 relative overflow-hidden">
-        {/* Watermark behind legal text */}
+      {/* BRUT । MUMBAI — full-width watermark row above legal */}
+      <div className="border-t-[3px] border-card/10 w-full overflow-hidden leading-none py-2">
         <p
-          className="pointer-events-none select-none absolute inset-0 flex items-center justify-center font-sans font-extrabold tracking-[-0.02em] leading-none whitespace-nowrap"
+          className="select-none font-sans font-extrabold tracking-[-0.03em] leading-none text-center w-full"
           style={{
-            fontSize: "clamp(32px, 8vw, 96px)",
-            WebkitTextStroke: "1.5px rgba(248,245,240,0.22)",
+            fontSize: "clamp(52px, 16vw, 180px)",
+            WebkitTextStroke: "1.5px rgba(248,245,240,0.38)",
             WebkitTextFillColor: "transparent",
             color: "transparent",
           }}
           aria-hidden="true"
         >
-          BRUT &nbsp;।&nbsp; MUMBAI
+          BRUT&nbsp;।&nbsp;MUMBAI
         </p>
+      </div>
 
-        <p className="relative z-10 font-mono text-[10px] text-card/25 tracking-[0.12em]">
+      {/* Legal bar */}
+      <div className="border-t-[3px] border-card/10 px-5 md:px-10 py-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
+        <p className="font-mono text-[10px] text-card/25 tracking-[0.12em]">
           © {YEAR} BRUT Realty Pvt. Ltd. · All rights reserved · Mumbai, Maharashtra
         </p>
-        <div className="relative z-10 flex items-center gap-4 flex-wrap">
+        <div className="flex items-center gap-4 flex-wrap">
           {LEGAL.map((l) => (
             <Link
               key={l.label}
