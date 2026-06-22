@@ -80,7 +80,7 @@ export default function Navbar() {
               <Link
                 key={item.label}
                 to={item.href}
-                className={`font-mono text-[11px] uppercase tracking-[0.2em] font-bold px-4 py-2 relative group ${
+                className={`font-mono text-[10px] uppercase tracking-[0.2em] font-bold px-3.5 py-2 relative group ${
                   isActivePage(item.href) ? "text-primary" : ""
                 }`}
               >
@@ -99,7 +99,7 @@ export default function Navbar() {
               <a
                 key={item.label}
                 href={resolveHref(item)}
-                className="font-mono text-[11px] uppercase tracking-[0.2em] font-bold px-4 py-2 relative group"
+                className="font-mono text-[10px] uppercase tracking-[0.2em] font-bold px-3.5 py-2 relative group"
               >
                 <span className="relative z-10 transition-colors duration-150 group-hover:text-primary-foreground">
                   {item.label}
