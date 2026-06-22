@@ -3,7 +3,7 @@ import { useRef, useMemo, Suspense } from "react";
 import * as THREE from "three";
 
 // Shared terracotta / cream palette for 3D elements.
-const TERRACOTTA = "#c6633f"; // hsl(14 56% 49%) approx
+const TERRACOTTA = "#c6633f";
 const CREAM = "#F8F5F0";
 
 // ── Hero accent: slowly rotating wireframe icosahedron ──
@@ -16,19 +16,16 @@ function HeroShape({ color = TERRACOTTA }: { color?: string }) {
   });
   return (
     <group ref={grp}>
-      {/* solid translucent core */}
       <mesh>
         <icosahedronGeometry args={[1.35, 0]} />
         <meshStandardMaterial color={color} transparent opacity={0.12} flatShading />
       </mesh>
-      {/* wireframe shell */}
       <mesh>
         <icosahedronGeometry args={[1.4, 0]} />
         <meshBasicMaterial color={color} wireframe />
       </mesh>
-      {/* inner counter-rotating knot */}
       <mesh>
-        <torusGeometry args={[0.6, 0.05, 12, 64]} />
+        <torusGeometry args={[0.6, 0.05, 8, 48]} />
         <meshBasicMaterial color={CREAM} wireframe transparent opacity={0.35} />
       </mesh>
     </group>
@@ -47,11 +44,11 @@ function HeroLighting() {
 
 export function Hero3D({ className }: { className?: string }) {
   return (
-    <div className={className} aria-hidden>
+    <div className={className} aria-hidden style={{ pointerEvents: "none" }}>
       <Canvas
         camera={{ position: [0, 0, 4.2], fov: 45 }}
-        dpr={[1, 1.8]}
-        gl={{ antialias: true, alpha: true }}
+        dpr={1}
+        gl={{ antialias: false, alpha: true, powerPreference: "low-power" }}
         style={{ width: "100%", height: "100%" }}
       >
         <Suspense fallback={null}>
@@ -64,7 +61,7 @@ export function Hero3D({ className }: { className?: string }) {
 }
 
 // ── Section accent: slow particle field ──
-function Particles({ count = 60, color = TERRACOTTA }: { count?: number; color?: string }) {
+function Particles({ count = 40, color = TERRACOTTA }: { count?: number; color?: string }) {
   const ref = useRef<THREE.Points>(null);
   const positions = useMemo(() => {
     const arr = new Float32Array(count * 3);
@@ -86,7 +83,7 @@ function Particles({ count = 60, color = TERRACOTTA }: { count?: number; color?:
       <bufferGeometry>
         <bufferAttribute attach="attributes-position" args={[positions, 3]} />
       </bufferGeometry>
-      <pointsMaterial color={color} size={0.045} sizeAttenuation transparent opacity={0.7} />
+      <pointsMaterial color={color} size={0.05} sizeAttenuation transparent opacity={0.7} />
     </points>
   );
 }
@@ -101,8 +98,12 @@ export function ParticleField({
   color?: string;
 }) {
   return (
-    <div className={className} aria-hidden>
-      <Canvas camera={{ position: [0, 0, 4], fov: 50 }} dpr={[1, 1.5]} gl={{ alpha: true }}>
+    <div className={className} aria-hidden style={{ pointerEvents: "none" }}>
+      <Canvas
+        camera={{ position: [0, 0, 4], fov: 50 }}
+        dpr={1}
+        gl={{ alpha: true, antialias: false, powerPreference: "low-power" }}
+      >
         <Suspense fallback={null}>
           <Particles count={count} color={color} />
         </Suspense>
