@@ -256,9 +256,9 @@ export default function OfficeMap() {
   };
 
   return (
-    <div className="w-full border-t-[3px] border-foreground relative">
+    <div className="w-full border-t-[3px] border-foreground relative isolate">
       {/* Transit controls */}
-      <div className="absolute bottom-3 left-3 z-[1001] flex flex-col gap-2">
+      <div className="absolute bottom-3 left-3 z-[10] flex flex-col gap-2">
         <button
           onClick={() => showTransitStop("bus")}
           className={`p-2 border-2 border-foreground bg-card cursor-pointer transition-all bs-hover flex items-center gap-2 ${
