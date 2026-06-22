@@ -49,19 +49,32 @@ export default function AboutPage() {
               </motion.p>
             </div>
 
-            {/* Stats */}
+            {/* Hero image + Stats */}
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="lg:w-1/2 grid grid-cols-2 gap-4 md:gap-5 w-full"
+              className="lg:w-1/2 flex flex-col gap-5 w-full"
             >
-              {TEAM_STATS.map((s) => (
-                <div key={s.label} className="border-[3px] border-foreground bg-card p-5 md:p-6 bs">
-                  <p className="font-sans font-extrabold text-3xl md:text-4xl tracking-tight mb-1">{s.value}</p>
-                  <p className="section-label text-muted-foreground">{s.label}</p>
+              <div className="relative overflow-hidden border-[3px] border-foreground bs">
+                <img
+                  src="https://images.unsplash.com/photo-1560448204-603b3fc33ddc?w=900&q=85"
+                  alt="Mumbai luxury property"
+                  className="w-full h-[220px] md:h-[280px] object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-foreground/40 to-transparent" />
+                <div className="absolute bottom-4 left-4">
+                  <span className="section-label text-card/80">Mumbai · Since 2009</span>
                 </div>
-              ))}
+              </div>
+              <div className="grid grid-cols-2 gap-4 md:gap-5">
+                {TEAM_STATS.map((s) => (
+                  <div key={s.label} className="border-[3px] border-foreground bg-card p-5 md:p-6 bs">
+                    <p className="font-sans font-extrabold text-3xl md:text-4xl tracking-tight mb-1">{s.value}</p>
+                    <p className="section-label text-muted-foreground">{s.label}</p>
+                  </div>
+                ))}
+              </div>
             </motion.div>
           </div>
         </section>
@@ -80,8 +93,26 @@ export default function AboutPage() {
               <p className="font-sans text-muted-foreground leading-relaxed">
                 BRUT started with one broker, one neighbourhood (Worli), and one rule — never show a client a property you wouldn't recommend to your own family. That rule still governs every deal we do.
               </p>
+              <div className="relative overflow-hidden border-[3px] border-foreground mt-2">
+                <img
+                  src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=85"
+                  alt="Mumbai skyline at dusk"
+                  className="w-full h-48 object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-foreground/30 to-transparent" />
+              </div>
             </div>
             <div className="flex flex-col gap-4">
+              <div className="relative overflow-hidden border-[3px] border-foreground mb-2">
+                <img
+                  src="https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=800&q=85"
+                  alt="Premium property interior"
+                  className="w-full h-48 object-cover"
+                />
+                <div className="absolute bottom-3 right-3 bg-primary text-primary-foreground font-mono text-[9px] font-bold px-2 py-0.5 uppercase tracking-[0.18em]">
+                  Our Standards
+                </div>
+              </div>
               <p className="font-sans text-muted-foreground leading-relaxed">
                 Today, we operate across Mumbai's most sought-after neighbourhoods with a team of four specialist brokers — each owning one micro-market completely. No territory overlap, no internal competition.
               </p>
