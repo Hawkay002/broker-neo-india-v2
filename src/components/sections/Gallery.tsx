@@ -32,7 +32,7 @@ function CategoryCycleBox({ category, catIndex }: { category: PortfolioCategory;
       intervalId = setInterval(() => {
         setCurrentIdx((prev) => (prev + 1) % images.length);
         setLoaded(false);
-      }, 3400);
+      }, 10000);
     }, catIndex * 700);
     return () => {
       clearTimeout(timeoutId);
