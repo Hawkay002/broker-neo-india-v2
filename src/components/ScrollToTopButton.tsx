@@ -27,7 +27,7 @@ export default function ScrollToTopButton() {
           exit={{ opacity: 0, y: 16 }}
           transition={{ duration: 0.22, ease: "easeOut" }}
           aria-label="Back to top"
-          className="fixed bottom-6 right-6 z-[200] flex flex-col items-center justify-center gap-1 border-[3px] border-foreground bg-background text-foreground w-12 h-12 cursor-pointer group hover:bg-foreground hover:text-background transition-colors duration-150"
+          className="fixed bottom-16 right-6 z-[200] flex flex-col items-center justify-center gap-1 border-[3px] border-foreground bg-background text-foreground w-12 h-12 cursor-pointer group hover:bg-foreground hover:text-background transition-colors duration-150"
         >
           <svg
             width="18"
