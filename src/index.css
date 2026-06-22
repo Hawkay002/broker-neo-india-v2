@@ -237,12 +237,8 @@ body::before {
   color: hsl(36 38% 97%) !important;
 }
 
-/* ─── MOBILE TOUCH DEVICE: always show reveals ─── */
+/* ─── MOBILE TOUCH DEVICE: always show gallery reveals ─── */
 @media (hover: none) {
-  .broker-specialty {
-    transform: translateY(0) !important;
-    opacity: 1 !important;
-  }
   .gallery-label {
     opacity: 1 !important;
     transform: translateY(0) !important;
@@ -251,10 +247,8 @@ body::before {
     opacity: 1 !important;
     background: linear-gradient(to top, rgba(45,35,24,0.60), transparent) !important;
   }
-  /* Show broker photos in colour on mobile (no hover available) */
-  .broker-photo {
-    filter: grayscale(0%) !important;
-  }
+  /* broker-specialty and broker-photo intentionally NOT forced on mobile
+     — tap-to-toggle (onTap) handles color + specialization reveal */
 }
 
 /* ─── LEAFLET MAP BRANDING ─── */
