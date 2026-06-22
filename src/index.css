@@ -150,6 +150,7 @@ body::before {
 /* ─── Marquee ─── */
 @keyframes marquee    { from { transform: translateX(0); }    to { transform: translateX(-50%); } }
 @keyframes marquee-r  { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+@keyframes gallery-progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 
 .marquee-l { animation: marquee   30s linear infinite; will-change: transform; }
 .marquee-r { animation: marquee-r 24s linear infinite; will-change: transform; }
