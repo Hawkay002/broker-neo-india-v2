@@ -19,7 +19,7 @@ export default function Hero() {
         {/* ── Left panel — terracotta "THE REAL DEAL" ── */}
         <div className="relative flex flex-col justify-between px-5 md:px-10 py-8 md:py-12 lg:w-[52%] xl:w-[55%] border-b-[3px] lg:border-b-0 lg:border-r-[3px] border-foreground bg-primary text-primary-foreground overflow-hidden">
           {/* 3D accent — full-panel background */}
-          <div className="absolute inset-0 pointer-events-none opacity-35">
+          <div className="absolute inset-0 pointer-events-none opacity-75">
             <Hero3D className="w-full h-full" />
           </div>
 
