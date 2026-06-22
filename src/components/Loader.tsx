@@ -6,6 +6,19 @@ export default function Loader() {
   const [visible, setVisible] = useState(true);
 
   useEffect(() => {
+    // Prevent scrolling on body when loader is visible
+    if (visible) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [visible]);
+
+  useEffect(() => {
     let start: number | null = null;
     const duration = 1600;
 
