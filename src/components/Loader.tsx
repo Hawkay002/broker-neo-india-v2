@@ -6,15 +6,21 @@ export default function Loader() {
   const [visible, setVisible] = useState(true);
 
   useEffect(() => {
-    // Prevent scrolling on body when loader is visible
+    // Prevent scrolling on body and html when loader is visible
     if (visible) {
+      document.documentElement.style.overflow = "hidden";
       document.body.style.overflow = "hidden";
+      document.body.style.height = "100%";
     } else {
+      document.documentElement.style.overflow = "";
       document.body.style.overflow = "";
+      document.body.style.height = "";
     }
 
     return () => {
+      document.documentElement.style.overflow = "";
       document.body.style.overflow = "";
+      document.body.style.height = "";
     };
   }, [visible]);
 
@@ -39,13 +45,15 @@ export default function Loader() {
   return (
     <AnimatePresence>
       {visible && (
-        <motion.div
-          key="loader"
-          initial={{ opacity: 1 }}
-          exit={{ opacity: 0, scale: 1.015 }}
-          transition={{ duration: 0.45, ease: "easeInOut" }}
-          className="fixed inset-0 z-[99999] bg-foreground flex flex-col items-center justify-center"
-        >
+          <motion.div
+            key="loader"
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0, scale: 1.015 }}
+            transition={{ duration: 0.45, ease: "easeInOut" }}
+            className="fixed inset-0 z-[99999] bg-foreground flex flex-col items-center justify-center"
+            style={{ touchAction: "none" }}
+          >
+
           {/* Rotating badge — top left */}
           <div className="absolute top-8 left-8 w-12 h-12 rounded-full border-2 border-card/20 flex items-center justify-center">
             <motion.div
