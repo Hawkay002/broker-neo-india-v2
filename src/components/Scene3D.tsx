@@ -17,15 +17,15 @@ function HeroShape({ color = TERRACOTTA }: { color?: string }) {
   return (
     <group ref={grp}>
       <mesh>
-        <icosahedronGeometry args={[1.35, 0]} />
-        <meshStandardMaterial color={color} transparent opacity={0.12} flatShading />
+        <icosahedronGeometry args={[2.6, 0]} />
+        <meshStandardMaterial color={color} transparent opacity={0.1} flatShading />
       </mesh>
       <mesh>
-        <icosahedronGeometry args={[1.4, 0]} />
+        <icosahedronGeometry args={[2.7, 0]} />
         <meshBasicMaterial color={color} wireframe />
       </mesh>
       <mesh>
-        <torusGeometry args={[0.6, 0.05, 8, 48]} />
+        <torusGeometry args={[1.1, 0.06, 8, 48]} />
         <meshBasicMaterial color={CREAM} wireframe transparent opacity={0.35} />
       </mesh>
     </group>
@@ -46,7 +46,7 @@ export function Hero3D({ className }: { className?: string }) {
   return (
     <div className={className} aria-hidden style={{ pointerEvents: "none" }}>
       <Canvas
-        camera={{ position: [0, 0, 4.2], fov: 45 }}
+        camera={{ position: [0, 0, 5.5], fov: 70 }}
         dpr={1}
         gl={{ antialias: false, alpha: true, powerPreference: "low-power" }}
         style={{ width: "100%", height: "100%" }}
