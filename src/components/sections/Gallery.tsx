@@ -89,9 +89,22 @@ function CategoryCycleBox({ category, catIndex }: { category: PortfolioCategory;
           <p className="text-card/60 font-mono text-[9px] uppercase tracking-[0.15em] mt-0.5">{current.property}</p>
         </div>
 
+        {/* Progress bar — fills over 10s, resets on image change */}
+        {images.length > 1 && (
+          <div className="absolute bottom-0 left-0 right-0 z-20 h-[3px] bg-card/20">
+            <div
+              key={`progress-${currentIdx}`}
+              className="h-full bg-primary origin-left"
+              style={{
+                animation: "gallery-progress 10s linear forwards",
+              }}
+            />
+          </div>
+        )}
+
         {/* Cycling dots */}
         {images.length > 1 && (
-          <div className="absolute bottom-3 right-3 z-20 flex gap-1">
+          <div className="absolute bottom-5 right-3 z-20 flex gap-1">
             {images.map((_, i) => (
               <button
                 key={i}
