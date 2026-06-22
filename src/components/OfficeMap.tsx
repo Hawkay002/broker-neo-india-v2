@@ -256,7 +256,7 @@ export default function OfficeMap() {
   };
 
   return (
-    <div className="w-full border-t-[3px] border-foreground relative isolate">
+    <div className="w-full border-t-[3px] border-foreground relative z-0 isolate">
       {/* Transit controls */}
       <div className="absolute bottom-3 left-3 z-[10] flex flex-col gap-2">
         <button
@@ -304,7 +304,7 @@ export default function OfficeMap() {
 
       {/* Walking distance info panel */}
       {footInfo && (
-        <div className="absolute bottom-3 right-3 z-[1001] bg-foreground text-card px-4 py-3 border-2 border-primary">
+        <div className="absolute bottom-3 right-3 z-[10] bg-foreground text-card px-4 py-3 border-2 border-primary">
           <p className="section-label text-card/50 mb-1">Walking from your location</p>
           <p className="font-sans font-extrabold text-xl leading-none text-primary">{footInfo.distance}</p>
           <p className="font-mono text-[10px] text-card/60 mt-1 uppercase tracking-[0.15em]">{footInfo.duration}</p>
@@ -313,7 +313,7 @@ export default function OfficeMap() {
 
       {/* Geolocation error */}
       {geoStatus === "error" && (
-        <div className="absolute bottom-3 right-3 z-[1001] bg-foreground text-card px-4 py-3 border-2 border-foreground/40">
+        <div className="absolute bottom-3 right-3 z-[10] bg-foreground text-card px-4 py-3 border-2 border-foreground/40">
           <p className="font-mono text-[10px] text-card/60 uppercase tracking-[0.12em]">Location access denied</p>
           <p className="font-mono text-[9px] text-card/40 mt-0.5">Allow location in browser settings</p>
         </div>
@@ -325,7 +325,7 @@ export default function OfficeMap() {
         style={{ height: "clamp(340px, 45vw, 560px)" }}
       />
 
-      <div className="absolute top-3 left-3 z-[1001] bg-foreground text-card font-mono text-[10px] font-bold px-3 py-1.5 uppercase tracking-[0.2em] pointer-events-none">
+      <div className="absolute top-3 left-3 z-[10] bg-foreground text-card font-mono text-[10px] font-bold px-3 py-1.5 uppercase tracking-[0.2em] pointer-events-none">
         Lower Parel · Mumbai
       </div>
     </div>
