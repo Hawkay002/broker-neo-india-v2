@@ -32,9 +32,9 @@ export default function Hero() {
             MUMBAI
           </span>
 
-          <motion.div variants={stagger} initial="hidden" animate="show" className="relative z-10">
+          <motion.div variants={stagger} initial="hidden" animate="show" className="relative z-10 flex flex-col items-center md:items-start text-center md:text-left">
             {/* Stamp */}
-            <motion.div variants={fadeUp} className="mb-6 inline-flex">
+            <motion.div variants={fadeUp} className="mb-6">
               <div className="stamp w-14 h-14 md:w-16 md:h-16 rounded-full border-[3px] border-primary-foreground flex flex-col items-center justify-center">
                 <p className="font-mono font-bold text-primary-foreground leading-tight text-center" style={{ fontSize: "8px", letterSpacing: "0.18em" }}>
                   BRUT<br />MUM
@@ -46,7 +46,7 @@ export default function Hero() {
             <motion.h1
               variants={fadeUp}
               className="font-sans font-extrabold leading-[0.88] tracking-[-0.04em] mb-6"
-              style={{ fontSize: "clamp(52px, 11vw, 130px)" }}
+              style={{ fontSize: "clamp(78px, 11vw, 130px)" }}
             >
               THE<br />
               <span style={{ WebkitTextStroke: "2.5px rgba(248,245,240,0.85)", color: "transparent" }}>REAL</span><br />
@@ -59,7 +59,7 @@ export default function Hero() {
             </motion.p>
 
             {/* Buttons */}
-            <motion.div variants={fadeUp} className="flex flex-wrap gap-3 mb-10 md:mb-0">
+            <motion.div variants={fadeUp} className="flex flex-wrap gap-3 mb-10 md:mb-0 justify-center md:justify-start">
               <a
                 href="#listings"
                 className="btn-fill-dark-on-light bg-primary-foreground text-foreground px-6 py-3.5 font-bold border-2 border-foreground bs bs-hover uppercase tracking-widest text-xs cursor-pointer inline-flex items-center gap-2"
