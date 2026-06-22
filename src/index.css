@@ -368,16 +368,13 @@ body::before {
    Hover effects, button fills, and scroll reveals are left untouched so
    the site stays interactive on desktops with the OS setting enabled.   */
 @media (prefers-reduced-motion: reduce) {
-  /* Stop infinite-loop decorative animations */
-  .marquee-l, .marquee-r, .scroll-x {
-    animation-play-state: paused !important;
-  }
   /* Stop pulsing / looping decorative keyframes */
   .pulse-ring, .img-placeholder {
     animation: none !important;
   }
   /* Smooth scroll → instant */
   html { scroll-behavior: auto !important; }
+  /* Marquees (.marquee-l, .marquee-r) are functional content — left running */
 }
 
 /* ── MapLibre overrides to match BRUT brutalist style ── */
