@@ -9,6 +9,18 @@ const EASE_SPRING = [0.22, 1, 0.36, 1] as const;
 function BrokerCard({ broker, index }: { broker: (typeof team)[0]; index: number }) {
   const [imgLoaded, setImgLoaded] = useState(false);
   const [hovered, setHovered] = useState(false);
+  let pressTimer: ReturnType<typeof setTimeout>;
+
+  const handleTouchStart = () => {
+    pressTimer = setTimeout(() => {
+      setHovered(true);
+    }, 200); // 200ms for "long press" feel on mobile
+  };
+
+  const handleTouchEnd = () => {
+    clearTimeout(pressTimer);
+    setHovered(false);
+  };
 
   return (
     <motion.div
@@ -18,6 +30,8 @@ function BrokerCard({ broker, index }: { broker: (typeof team)[0]; index: number
       transition={{ duration: 0.5, delay: index * 0.1 }}
       onHoverStart={() => setHovered(true)}
       onHoverEnd={() => setHovered(false)}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
       className="border-[3px] border-foreground bg-card overflow-hidden flex flex-col bs"
     >
       {/* Photo — B&W, turns colour on hover */}
