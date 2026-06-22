@@ -138,13 +138,14 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* BRUT | MUMBAI stroke watermark */}
-      <div className="border-t-[3px] border-card/10 px-5 md:px-10 py-6 md:py-8 overflow-hidden">
+      {/* Bottom bar — BRUT । MUMBAI watermark as background overlay */}
+      <div className="border-t-[3px] border-card/10 px-5 md:px-10 py-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 relative overflow-hidden">
+        {/* Watermark behind legal text */}
         <p
-          className="font-sans font-extrabold tracking-[-0.02em] leading-none select-none text-center whitespace-nowrap"
+          className="pointer-events-none select-none absolute inset-0 flex items-center justify-center font-sans font-extrabold tracking-[-0.02em] leading-none whitespace-nowrap"
           style={{
-            fontSize: "clamp(38px, 9.5vw, 108px)",
-            WebkitTextStroke: "1.5px rgba(248,245,240,0.38)",
+            fontSize: "clamp(32px, 8vw, 96px)",
+            WebkitTextStroke: "1.5px rgba(248,245,240,0.22)",
             WebkitTextFillColor: "transparent",
             color: "transparent",
           }}
@@ -152,14 +153,11 @@ export default function Footer() {
         >
           BRUT &nbsp;।&nbsp; MUMBAI
         </p>
-      </div>
 
-      {/* Bottom bar */}
-      <div className="border-t-[3px] border-card/10 px-5 md:px-10 py-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
-        <p className="font-mono text-[10px] text-card/25 tracking-[0.12em]">
+        <p className="relative z-10 font-mono text-[10px] text-card/25 tracking-[0.12em]">
           © {YEAR} BRUT Realty Pvt. Ltd. · All rights reserved · Mumbai, Maharashtra
         </p>
-        <div className="flex items-center gap-4 flex-wrap">
+        <div className="relative z-10 flex items-center gap-4 flex-wrap">
           {LEGAL.map((l) => (
             <Link
               key={l.label}
