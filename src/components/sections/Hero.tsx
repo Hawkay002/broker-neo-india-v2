@@ -23,10 +23,10 @@ export default function Hero() {
             <Hero3D className="w-full h-full" />
           </div>
 
-          {/* Faded "MUMBAI" watermark — bottom of the panel */}
+          {/* Faded "MUMBAI" watermark — shifted upward for both desktop and mobile */}
           <span
             aria-hidden
-            className="watermark absolute -bottom-6 md:-bottom-10 left-0 right-0 text-center select-none"
+            className="watermark absolute bottom-8 md:bottom-14 left-0 right-0 text-center select-none"
             style={{ fontSize: "clamp(72px, 15vw, 180px)" }}
           >
             MUMBAI
