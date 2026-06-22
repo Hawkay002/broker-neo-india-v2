@@ -248,7 +248,8 @@ body::before {
     transform: translateY(0) !important;
   }
   .gallery-overlay {
-    background-color: rgba(45,35,24,0.40) !important;
+    opacity: 1 !important;
+    background: linear-gradient(to top, rgba(45,35,24,0.60), transparent) !important;
   }
 }
 
