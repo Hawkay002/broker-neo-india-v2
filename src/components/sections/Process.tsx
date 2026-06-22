@@ -113,7 +113,7 @@ export default function Process() {
               {/* Big outlined number — top-right overlay */}
               <span
                 aria-hidden
-                className="absolute top-2 right-3 font-sans font-extrabold leading-none select-none pointer-events-none"
+                className="absolute bottom-2 right-3 font-sans font-extrabold leading-none select-none pointer-events-none"
                 style={{
                   fontSize: "clamp(110px, 11vw, 180px)",
                   WebkitTextStroke: `2.5px ${tone.numberStroke}`,
