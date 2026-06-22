@@ -3,8 +3,11 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { useEffect } from "react";
+import { AnimatePresence } from "framer-motion";
 import ScrollToTopButton from "@/components/ScrollToTopButton";
 import { ClickEffect } from "@/components/ClickEffect";
+import CustomCursor from "@/components/CustomCursor";
+import PageTransition from "@/components/PageTransition";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
 import AboutPage from "@/pages/AboutPage";
@@ -32,36 +35,39 @@ function ScrollToTop() {
 }
 
 function Router() {
+  const [location] = useLocation();
   return (
     <>
       <ScrollToTop />
-      <Switch>
-        {/* Home */}
-        <Route path="/" component={Home} />
-
-        {/* Company */}
-        <Route path="/about" component={AboutPage} />
-        <Route path="/our-story" component={OurStoryPage} />
-        <Route path="/careers" component={CareersPage} />
-        <Route path="/team" component={TeamPage} />
-
-        {/* Listings */}
-        <Route path="/listings" component={AllListingsPage} />
-        <Route path="/listings/:slug" component={ListingDetailPage} />
-
-        {/* Services */}
-        <Route path="/services/:slug" component={ServicePage} />
-
-        {/* Neighbourhoods */}
-        <Route path="/neighbourhoods/:slug" component={NeighbourhoodPage} />
-
-        {/* Legal */}
-        <Route path="/privacy" component={PrivacyPage} />
-        <Route path="/terms" component={TermsPage} />
-        <Route path="/accessibility" component={AccessibilityPage} />
-
-        <Route component={NotFound} />
-      </Switch>
+      <AnimatePresence mode="wait">
+        <Switch>
+          {/* Home */}
+          <Route path="/" component={(props) => <PageTransition><Home {...props} /></PageTransition>} />
+  
+          {/* Company */}
+          <Route path="/about" component={(props) => <PageTransition><AboutPage {...props} /></PageTransition>} />
+          <Route path="/our-story" component={(props) => <PageTransition><OurStoryPage {...props} /></PageTransition>} />
+          <Route path="/careers" component={(props) => <PageTransition><CareersPage {...props} /></PageTransition>} />
+          <Route path="/team" component={(props) => <PageTransition><TeamPage {...props} /></PageTransition>} />
+  
+          {/* Listings */}
+          <Route path="/listings" component={(props) => <PageTransition><AllListingsPage {...props} /></PageTransition>} />
+          <Route path="/listings/:slug" component={(props) => <PageTransition><ListingDetailPage {...props} /></PageTransition>} />
+  
+          {/* Services */}
+          <Route path="/services/:slug" component={(props) => <PageTransition><ServicePage {...props} /></PageTransition>} />
+  
+          {/* Neighbourhoods */}
+          <Route path="/neighbourhoods/:slug" component={(props) => <PageTransition><NeighbourhoodPage {...props} /></PageTransition>} />
+  
+          {/* Legal */}
+          <Route path="/privacy" component={(props) => <PageTransition><PrivacyPage {...props} /></PageTransition>} />
+          <Route path="/terms" component={(props) => <PageTransition><TermsPage {...props} /></PageTransition>} />
+          <Route path="/accessibility" component={(props) => <PageTransition><AccessibilityPage {...props} /></PageTransition>} />
+  
+          <Route component={(props) => <PageTransition><NotFound {...props} /></PageTransition>} />
+        </Switch>
+      </AnimatePresence>
     </>
   );
 }
@@ -73,6 +79,7 @@ function App() {
         <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
           <Router />
         </WouterRouter>
+        <CustomCursor />
         <ScrollToTopButton />
         <ClickEffect />
         <Toaster />

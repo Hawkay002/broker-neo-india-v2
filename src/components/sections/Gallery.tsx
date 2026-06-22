@@ -1,6 +1,7 @@
-import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
 import { portfolio, type PortfolioCategory } from "@/data";
+import Lightbox from "@/components/Lightbox";
 
 const CATEGORIES: { key: PortfolioCategory | "All"; label: string }[] = [
   { key: "All", label: "All" },
@@ -129,12 +130,21 @@ function PortfolioItem({
   index,
   category,
   categoryImages,
+  onOpenLightbox,
 }: {
   img: (typeof portfolio)[0];
   index: number;
   category: PortfolioCategory | "All";
   categoryImages: typeof portfolio;
+  onOpenLightbox: (idx: number) => void;
 }) {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+  const y = useTransform(scrollYProgress, [0, 1], [-20, 20]);
+
   const [loaded, setLoaded] = useState(false);
   const [hovered, setHovered] = useState(false);
   const [currentImgIndex, setCurrentImgIndex] = useState(() =>
@@ -169,35 +179,39 @@ function PortfolioItem({
   const currentCat = category === "All" ? img.category : category;
 
   return (
-    <motion.div
-      layout
-      initial={{ clipPath: "inset(0 100% 0 0)" }}
-      animate={{ clipPath: "inset(0 0% 0 0)" }}
-      exit={{ clipPath: "inset(0 0 0 100%)" }}
-      transition={{ duration: 0.65, delay: index * 0.07, ease: [0.76, 0, 0.24, 1] }}
-      onHoverStart={() => setHovered(true)}
-      onHoverEnd={() => setHovered(false)}
-      onTap={() => setHovered((h) => !h)}
-      className={`relative overflow-hidden border-b-[3px] md:border-b-0 ${
-        index % 3 === 2 ? "md:border-r-0" : "md:border-r-[3px] border-r-[3px]"
-      } border-foreground cursor-pointer`}
-      style={{ aspectRatio: aspectMapLocal[currentCat] || "4/3" }}
-    >
-      {!loaded && <div className="absolute inset-0 img-placeholder" />}
-      <AnimatePresence mode="wait">
-        <motion.img
-          key={currentImg.src}
-          src={currentImg.src}
-          alt={currentImg.label}
-          onLoad={() => setLoaded(true)}
-          initial={{ opacity: 0 }}
-          animate={{ scale: hovered ? 1.08 : 1, opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ opacity: { duration: 0.4 }, scale: { duration: 0.5, ease: EASE_SPRING } }}
-          className={`w-full h-full object-cover ${loaded ? "opacity-100" : "opacity-0"}`}
-          style={{ willChange: "transform" }}
-        />
-      </AnimatePresence>
+      <motion.div
+        ref={ref}
+        layout
+        initial={{ clipPath: "inset(0 100% 0 0)" }}
+        animate={{ clipPath: "inset(0 0% 0 0)" }}
+        exit={{ clipPath: "inset(0 0 0 100%)" }}
+        transition={{ duration: 0.65, delay: index * 0.07, ease: [0.76, 0, 0.24, 1] }}
+        onHoverStart={() => setHovered(true)}
+        onHoverEnd={() => setHovered(false)}
+        onTap={() => {
+          setHovered((h) => !h);
+          onOpenLightbox(index);
+        }}
+        className={`relative overflow-hidden border-b-[3px] md:border-b-0 ${
+          index % 3 === 2 ? "md:border-r-0" : "md:border-r-[3px] border-r-[3px]"
+        } border-foreground cursor-pointer`}
+        style={{ aspectRatio: aspectMapLocal[currentCat] || "4/3" }}
+      >
+        {!loaded && <div className="absolute inset-0 img-placeholder" />}
+        <AnimatePresence mode="wait">
+          <motion.img
+            key={currentImg.src}
+            src={currentImg.src}
+            alt={currentImg.label}
+            onLoad={() => setLoaded(true)}
+            initial={{ opacity: 0 }}
+            animate={{ scale: hovered ? 1.08 : 1, opacity: 1, y }}
+            exit={{ opacity: 0 }}
+            transition={{ opacity: { duration: 0.4 }, scale: { duration: 0.5, ease: EASE_SPRING }, y: { duration: 0.1 } }}
+            className={`w-full h-full object-cover ${loaded ? "opacity-100" : "opacity-0"}`}
+            style={{ willChange: "transform" }}
+          />
+        </AnimatePresence>
 
       <motion.div
         className="gallery-overlay absolute inset-0 bg-gradient-to-t from-foreground/60 via-transparent to-transparent flex flex-col justify-end p-3 md:p-4 pointer-events-none"
@@ -247,9 +261,16 @@ function PortfolioItem({
 
 export default function Gallery() {
   const [active, setActive] = useState<PortfolioCategory | "All">("All");
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxStartIdx, setLightboxStartIdx] = useState(0);
 
   const filtered = active === "All" ? portfolio : portfolio.filter((img) => img.category === active);
   const categoryImages = active === "All" ? [] : portfolio.filter((img) => img.category === active);
+
+  const openLightbox = (idx: number) => {
+    setLightboxStartIdx(idx);
+    setLightboxOpen(true);
+  };
 
   return (
     <section id="gallery" className="bg-card border-b-[3px] border-foreground">
@@ -261,6 +282,7 @@ export default function Gallery() {
         </div>
         <span className="section-label text-muted-foreground">{portfolio.length} images across 3 categories</span>
       </div>
+
 
       {/* Category filters */}
       <div className="border-b-[3px] border-foreground px-5 md:px-10 py-3 flex gap-2 overflow-x-auto scrollbar-none">
@@ -319,6 +341,7 @@ export default function Gallery() {
                     index={i}
                     category={active}
                     categoryImages={categoryImages}
+                    onOpenLightbox={openLightbox}
                   />
                 ))}
               </AnimatePresence>
@@ -326,6 +349,16 @@ export default function Gallery() {
           )}
         </AnimatePresence>
       </div>
+
+      <AnimatePresence>
+        {lightboxOpen && (
+          <Lightbox
+            images={active === "All" ? portfolio : categoryImages}
+            startIndex={lightboxStartIdx}
+            onClose={() => setLightboxOpen(false)}
+          />
+        )}
+      </AnimatePresence>
 
       {/* Bottom bar */}
       <div className="px-5 md:px-10 py-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">

@@ -1,6 +1,7 @@
 import { Menu, X } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
+import Magnetic from "@/components/Magnetic";
 
 // Section anchors scroll within the home page.
 // Page links route to dedicated pages (which scroll to top via ScrollToTop).
@@ -77,18 +78,18 @@ export default function Navbar() {
           <nav className="hidden md:flex items-center gap-1">
             {/* Page links (About Us, Our Story) */}
             {pageItems.map((item) => (
-              <Link
-                key={item.label}
-                to={item.href}
-                className={`font-mono text-[10px] uppercase tracking-[0.2em] font-bold px-3.5 py-2 relative group ${
-                  isActivePage(item.href) ? "text-primary" : ""
-                }`}
-              >
-                <span className="relative z-10 transition-colors duration-150 group-hover:text-primary-foreground">
-                  {item.label}
-                </span>
-                <span className="absolute inset-0 bg-primary scale-x-0 group-hover:scale-x-100 transition-transform duration-[250ms] origin-left" />
-              </Link>
+                <Link
+                  key={item.label}
+                  to={item.href}
+                  className={`font-mono text-[10px] uppercase tracking-[0.2em] font-bold px-3.5 py-2 relative group ${
+                    isActivePage(item.href) ? "text-gold" : ""
+                  }`}
+                >
+                  <span className="relative z-10 transition-colors duration-150 group-hover:text-primary-foreground">
+                    {item.label}
+                  </span>
+                  <span className="absolute inset-0 bg-gold scale-x-0 group-hover:scale-x-100 transition-transform duration-[250ms] origin-left" />
+                </Link>
             ))}
 
             {/* Separator */}
@@ -112,12 +113,14 @@ export default function Navbar() {
           {/* CTA — desktop */}
           <div className="hidden md:flex items-center gap-4">
             <span className="section-label text-muted-foreground hidden lg:block">Est. 2009 · Mumbai</span>
-            <a
-              href={isHome ? "#contact" : "/#contact"}
-              className="btn-fill-dark bg-primary text-primary-foreground px-5 py-2.5 font-bold border-2 border-foreground bs bs-hover uppercase tracking-widest text-xs cursor-pointer"
-            >
-              Book a Call
-            </a>
+              <Magnetic>
+                <a
+                  href={isHome ? "#contact" : "/#contact"}
+                  className="btn-fill-dark bg-primary text-primary-foreground px-5 py-2.5 font-bold border-2 border-foreground bs bs-hover uppercase tracking-widest text-xs cursor-pointer"
+                >
+                  Book a Call
+                </a>
+              </Magnetic>
           </div>
 
           {/* Mobile toggle */}

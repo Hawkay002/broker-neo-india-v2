@@ -1,6 +1,7 @@
 import { Link } from "wouter";
 import { Instagram, Linkedin, Twitter, Youtube } from "lucide-react";
 import { useState, useRef } from "react";
+import { motion } from "framer-motion";
 
 const YEAR = new Date().getFullYear();
 
@@ -39,7 +40,6 @@ const SOCIAL = [
   { icon: Youtube, label: "YouTube", href: "https://youtube.com/@brutrealty" },
 ];
 
-// Image URLs from the data file (property images)
 const FOOTER_IMAGES = [
   "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=85",
   "https://images.unsplash.com/photo-1560185007-cde436f6a4d0?w=1200&q=85",
@@ -53,7 +53,6 @@ const FOOTER_IMAGES = [
   "https://images.unsplash.com/photo-1605648916969-9f5a5a0a6c4a?w=1200&q=85",
 ];
 
-// Long-press threshold in milliseconds
 const LONG_PRESS_DURATION = 500;
 
 function FooterLink({ href, label }: { href: string; label: string }) {
@@ -72,52 +71,27 @@ function FooterLink({ href, label }: { href: string; label: string }) {
   );
 }
 
-// Social Icon with fill-up animation on hover (desktop) or long-press (mobile)
 function SocialIcon({ icon: Icon, label, href }: { icon: any; label: string; href: string }) {
   const [isActive, setIsActive] = useState(false);
   const touchTimerRef = useRef<NodeJS.Timeout | null>(null);
   const touchStartTimeRef = useRef<number>(0);
 
-  // Handle mouse enter (desktop hover)
-  const handleMouseEnter = () => {
-    setIsActive(true);
-  };
+  const handleMouseEnter = () => setIsActive(true);
+  const handleMouseLeave = () => setIsActive(false);
 
-  // Handle mouse leave (desktop)
-  const handleMouseLeave = () => {
-    setIsActive(false);
-  };
-
-  // Handle touch start (mobile)
   const handleTouchStart = () => {
     touchStartTimeRef.current = Date.now();
-    
-    touchTimerRef.current = setTimeout(() => {
-      // Long press detected (500ms)
-      setIsActive(true);
-    }, LONG_PRESS_DURATION);
+    touchTimerRef.current = setTimeout(() => setIsActive(true), LONG_PRESS_DURATION);
   };
 
-  // Handle touch end (mobile)
   const handleTouchEnd = () => {
-    if (touchTimerRef.current) {
-      clearTimeout(touchTimerRef.current);
-    }
-    
-    const touchDuration = Date.now() - touchStartTimeRef.current;
-    
-    // If it was a quick tap (less than 500ms), clear the active state
-    if (touchDuration < LONG_PRESS_DURATION) {
-      setIsActive(false);
-    }
+    if (touchTimerRef.current) clearTimeout(touchTimerRef.current);
+    if (Date.now() - touchStartTimeRef.current < LONG_PRESS_DURATION) setIsActive(false);
   };
 
-  // Handle touch move (cancel long press if finger moves)
   const handleTouchMove = () => {
-    if (touchTimerRef.current) {
-      clearTimeout(touchTimerRef.current);
-      setIsActive(false);
-    }
+    if (touchTimerRef.current) clearTimeout(touchTimerRef.current);
+    setIsActive(false);
   };
 
   return (
@@ -132,11 +106,8 @@ function SocialIcon({ icon: Icon, label, href }: { icon: any; label: string; hre
       onTouchEnd={handleTouchEnd}
       onTouchMove={handleTouchMove}
       className="relative w-9 h-9 border border-card/20 flex items-center justify-center text-card/40 transition-colors cursor-pointer overflow-hidden"
-      style={{
-        borderColor: isActive ? "hsl(14 56% 49%)" : "rgba(248,245,240,0.2)",
-      }}
+      style={{ borderColor: isActive ? "hsl(14 56% 49%)" : "rgba(248,245,240,0.2)" }}
     >
-      {/* Background fill that animates from bottom to top */}
       <div
         style={{
           position: "absolute",
@@ -152,8 +123,6 @@ function SocialIcon({ icon: Icon, label, href }: { icon: any; label: string; hre
           pointerEvents: "none",
         }}
       />
-      
-      {/* Icon that stays on top */}
       <div
         style={{
           position: "relative",
@@ -168,60 +137,32 @@ function SocialIcon({ icon: Icon, label, href }: { icon: any; label: string; hre
   );
 }
 
-// Letter mask component with image reveal on hover (desktop) or long-press (mobile)
 function LetterMaskText({ text, images }: { text: string; images: string[] }) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const touchTimerRef = useRef<NodeJS.Timeout | null>(null);
   const touchStartTimeRef = useRef<number>(0);
 
-  // Handle mouse enter (desktop hover)
-  const handleMouseEnter = (index: number) => {
-    setHoveredIndex(index);
-  };
+  const handleMouseEnter = (index: number) => setHoveredIndex(index);
+  const handleMouseLeave = () => setHoveredIndex(null);
 
-  // Handle mouse leave (desktop)
-  const handleMouseLeave = () => {
-    setHoveredIndex(null);
-  };
-
-  // Handle touch start (mobile)
   const handleTouchStart = (index: number) => {
     touchStartTimeRef.current = Date.now();
-    
-    touchTimerRef.current = setTimeout(() => {
-      // Long press detected (500ms)
-      setHoveredIndex(index);
-    }, LONG_PRESS_DURATION);
+    touchTimerRef.current = setTimeout(() => setHoveredIndex(index), LONG_PRESS_DURATION);
   };
 
-  // Handle touch end (mobile)
   const handleTouchEnd = () => {
-    if (touchTimerRef.current) {
-      clearTimeout(touchTimerRef.current);
-    }
-    
-    const touchDuration = Date.now() - touchStartTimeRef.current;
-    
-    // If it was a quick tap (less than 500ms), clear the hover state
-    if (touchDuration < LONG_PRESS_DURATION) {
-      setHoveredIndex(null);
-    }
+    if (touchTimerRef.current) clearTimeout(touchTimerRef.current);
+    if (Date.now() - touchStartTimeRef.current < LONG_PRESS_DURATION) setHoveredIndex(null);
   };
 
-  // Handle touch move (cancel long press if finger moves)
   const handleTouchMove = () => {
-    if (touchTimerRef.current) {
-      clearTimeout(touchTimerRef.current);
-      setHoveredIndex(null);
-    }
+    if (touchTimerRef.current) clearTimeout(touchTimerRef.current);
+    setHoveredIndex(null);
   };
 
   return (
     <div className="select-none font-sans font-extrabold leading-none text-center w-full relative"
-      style={{
-        fontSize: "clamp(44px, 14vw, 160px)",
-        letterSpacing: "0.08em",
-      }}
+      style={{ fontSize: "clamp(44px, 14vw, 160px)", letterSpacing: "0.08em" }}
     >
       <div className="flex justify-center gap-0">
         {text.split("").map((letter, index) => {
@@ -241,31 +182,32 @@ function LetterMaskText({ text, images }: { text: string; images: string[] }) {
                 display: "inline-block",
                 userSelect: "none",
                 WebkitUserSelect: "none",
-                // Always apply text stroke with consistent width
                 WebkitTextStroke: "1.5px rgba(248,245,240,0.38)",
-                WebkitTextFillColor: isHovered ? "transparent" : "transparent",
+                WebkitTextFillColor: "transparent",
                 color: "transparent",
-                // Apply background image when hovered
-                backgroundImage: isHovered ? `url(${imageUrl})` : "none",
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                WebkitBackgroundClip: isHovered ? "text" : "unset",
-                backgroundClip: isHovered ? "text" : "unset",
-                transition: "all 0.3s ease",
               }}
             >
-              {letter}
+              <span className="relative z-10">{letter}</span>
+              <motion.div
+                initial={false}
+                animate={{ opacity: isHovered ? 1 : 0 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+                className="absolute inset-0 z-0 pointer-events-none"
+                style={{
+                  backgroundImage: `url(${imageUrl})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  WebkitBackgroundClip: "text",
+                  backgroundClip: "text",
+                  color: "transparent",
+                }}
+              >
+                {letter}
+              </motion.div>
             </span>
           );
         })}
       </div>
-
-      <style>{`
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-      `}</style>
     </div>
   );
 }
@@ -273,13 +215,9 @@ function LetterMaskText({ text, images }: { text: string; images: string[] }) {
 export default function Footer() {
   return (
     <footer id="footer" className="bg-foreground text-card border-t-[3px] border-foreground">
-      {/* Big CTA */}
       <div className="border-b-[3px] border-card/15 px-5 md:px-10 py-10 md:py-14 flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <h2
-            className="font-sans font-extrabold leading-tight tracking-tight"
-            style={{ fontSize: "clamp(36px, 7vw, 80px)" }}
-          >
+          <h2 className="font-sans font-extrabold leading-tight tracking-tight" style={{ fontSize: "clamp(36px, 7vw, 80px)" }}>
             Ready to<br />
             <span style={{ WebkitTextStroke: "2px rgba(248,245,240,0.25)", WebkitTextFillColor: "transparent", color: "transparent" }}>
               find yours?
@@ -287,19 +225,14 @@ export default function Footer() {
           </h2>
         </div>
         <div className="flex flex-col gap-3">
-          <a
-            href="/#contact"
-            className="btn-fill-dark bg-primary text-primary-foreground px-7 py-4 font-bold border-2 border-primary-foreground/20 bs-cream bs-cream-hover uppercase tracking-widest text-sm cursor-pointer inline-block"
-          >
+          <a href="/#contact" className="btn-fill-dark bg-primary text-primary-foreground px-7 py-4 font-bold border-2 border-primary-foreground/20 bs-cream bs-cream-hover uppercase tracking-widest text-sm cursor-pointer inline-block">
             Book a Call →
           </a>
           <p className="section-label text-card/25 text-right">Avg. response time: &lt;45 min</p>
         </div>
       </div>
 
-      {/* Main grid */}
       <div className="border-b-[3px] border-card/15 px-5 md:px-10 py-10 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-10">
-        {/* Brand column */}
         <div className="col-span-2 md:col-span-1 flex flex-col gap-4">
           <div className="flex items-center gap-0 mb-2">
             <span className="font-sans font-extrabold text-[22px] tracking-[-0.04em] text-card leading-none">BRUT</span>
@@ -317,57 +250,43 @@ export default function Footer() {
             ))}
           </div>
           <p className="section-label text-card/20 mt-2">MahaRERA Reg. No.<br />P51800028099</p>
-
-          {/* Social icons with fill-up animation */}
           <div className="flex gap-3 mt-3">
             {SOCIAL.map(({ icon, label, href }) => (
               <SocialIcon key={label} icon={icon} label={label} href={href} />
             ))}
           </div>
         </div>
-
-        {/* Company */}
         <div className="flex flex-col gap-3">
           <h3 className="section-label text-card/30 mb-1">Company</h3>
           {COMPANY.map((l) => <FooterLink key={l.label} {...l} />)}
         </div>
-
-        {/* Services */}
         <div className="flex flex-col gap-3">
           <h3 className="section-label text-card/30 mb-1">Services</h3>
           {SERVICES.map((l) => <FooterLink key={l.label} {...l} />)}
         </div>
-
-        {/* Neighbourhoods */}
         <div className="flex flex-col gap-3">
           <h3 className="section-label text-card/30 mb-1">Neighbourhoods</h3>
           {NEIGHBOURHOODS.map((l) => <FooterLink key={l.label} {...l} />)}
         </div>
       </div>
 
-      {/* BRUT / MUMBAI — full-width stacked watermark with image reveal on hover (desktop) or long-press (mobile) */}
       <div className="border-t-[3px] border-card/10 w-full overflow-hidden leading-none py-1">
-        <div style={{ transform: "scaleX(1.32)", transformOrigin: "center" }}>
+        <div style={{ transform: "scaleX(1.6)", transformOrigin: "center" }}>
           <LetterMaskText text="BRUT" images={FOOTER_IMAGES} />
         </div>
         <div className="w-full border-t-[2px] border-card/20 my-1" aria-hidden="true" />
-        <div style={{ transform: "scaleX(1.32)", transformOrigin: "center" }}>
+        <div style={{ transform: "scaleX(1.6)", transformOrigin: "center" }}>
           <LetterMaskText text="MUMBAI" images={FOOTER_IMAGES} />
         </div>
       </div>
 
-      {/* Legal bar */}
       <div className="border-t-[3px] border-card/10 px-5 md:px-10 py-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
         <p className="font-mono text-[10px] text-card/25 tracking-[0.12em]">
           © {YEAR} BRUT Realty Pvt. Ltd. · All rights reserved · Mumbai, Maharashtra
         </p>
         <div className="flex items-center gap-4 flex-wrap">
           {LEGAL.map((l) => (
-            <Link
-              key={l.label}
-              to={l.href}
-              className="font-mono text-[10px] text-card/30 hover:text-primary transition-colors duration-150 tracking-[0.12em] cursor-pointer"
-            >
+            <Link key={l.label} to={l.href} className="font-mono text-[10px] text-card/30 hover:text-primary transition-colors duration-150 tracking-[0.12em] cursor-pointer">
               {l.label}
             </Link>
           ))}

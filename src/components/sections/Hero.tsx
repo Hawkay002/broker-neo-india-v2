@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { BedDouble, Bath, Maximize2 } from "lucide-react";
 import { Hero3D } from "@/components/Scene3D";
+import Magnetic from "@/components/Magnetic";
 
 const fadeUp = { hidden: { opacity: 0, y: 28 }, show: { opacity: 1, y: 0 } };
 const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.09 } } };
@@ -45,10 +46,10 @@ export default function Hero() {
             {/* Main headline */}
             <motion.h1
               variants={fadeUp}
-              className="font-sans font-extrabold leading-[0.88] tracking-[-0.04em] mb-6 w-full text-center md:text-left"
-              style={{ fontSize: "clamp(78px, 11vw, 130px)", transform: "scaleX(1.32)", transformOrigin: "center" }}
+              className="font-sans font-extrabold leading-[0.9] tracking-tighter mb-6 w-full text-center md:text-left"
+              style={{ fontSize: "clamp(64px, 10vw, 110px)" }}
             >
-              THE <span style={{ WebkitTextStroke: "2.5px rgba(248,245,240,0.85)", color: "transparent" }}>REAL</span> DEAL.
+              THE <span className="font-serif italic font-medium" style={{ WebkitTextStroke: "1.5px rgba(248,245,240,0.85)", color: "transparent" }}>Real</span> DEAL.
             </motion.h1>
 
             {/* Sub-copy */}
@@ -57,20 +58,24 @@ export default function Hero() {
             </motion.p>
 
             {/* Buttons */}
-            <motion.div variants={fadeUp} className="flex flex-wrap gap-3 mb-10 md:mb-0 justify-center md:justify-start">
-              <a
-                href="#listings"
-                className="btn-fill-dark-on-light bg-primary-foreground text-foreground px-6 py-3.5 font-bold border-2 border-foreground bs bs-hover uppercase tracking-widest text-xs cursor-pointer inline-flex items-center gap-2"
-              >
-                See Listings <span className="text-primary">↗</span>
-              </a>
-              <a
-                href="#brokers"
-                className="btn-fill-primary-on-dark bg-transparent text-primary-foreground px-6 py-3.5 font-bold border-2 border-primary-foreground/40 uppercase tracking-widest text-xs cursor-pointer inline-block"
-              >
-                Meet the Team
-              </a>
-            </motion.div>
+                <motion.div variants={fadeUp} className="flex flex-wrap gap-3 mb-10 md:mb-0 justify-center md:justify-start">
+                  <Magnetic>
+                    <a
+                      href="#listings"
+                      className="btn-fill-dark-on-light bg-primary-foreground text-foreground px-6 py-3.5 font-bold border-2 border-foreground bs bs-hover uppercase tracking-widest text-xs cursor-pointer inline-flex items-center gap-2"
+                    >
+                      See Listings <span className="text-primary">↗</span>
+                    </a>
+                  </Magnetic>
+                  <Magnetic>
+                    <a
+                      href="#brokers"
+                      className="btn-fill-primary-on-dark bg-transparent text-primary-foreground px-6 py-3.5 font-bold border-2 border-primary-foreground/40 uppercase tracking-widest text-xs cursor-pointer inline-block"
+                    >
+                      Meet the Team
+                    </a>
+                  </Magnetic>
+                </motion.div>
           </motion.div>
 
           {/* Stats row */}

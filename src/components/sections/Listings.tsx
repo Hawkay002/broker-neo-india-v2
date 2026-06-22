@@ -12,7 +12,7 @@ function ListingCard({ listing, index }: { listing: (typeof listings)[0]; index:
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.5, delay: index * 0.07 }}
-      className="border-[3px] border-foreground bg-card group overflow-hidden flex flex-col bs tilt"
+      className="border-2 border-foreground bg-card group overflow-hidden flex flex-col bs tilt hover:bg-gradient-to-br from-card to-background transition-colors duration-500"
     >
       {/* Image */}
       <Link to={`/listings/${listing.slug}`} className="block">

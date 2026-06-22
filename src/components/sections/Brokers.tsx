@@ -47,7 +47,7 @@ function BrokerCard({ broker, index }: { broker: (typeof team)[0]; index: number
       onHoverEnd={() => !isMobile && setHovered(false)}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
-      className="border-[3px] border-foreground bg-card overflow-hidden flex flex-col bs"
+      className="border-2 border-foreground bg-card overflow-hidden flex flex-col bs hover:shadow-lg transition-shadow duration-300"
     >
       {/* Photo — B&W, turns colour on hover */}
       <div className="relative aspect-[3/4] overflow-hidden">
