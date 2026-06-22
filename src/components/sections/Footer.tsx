@@ -72,6 +72,102 @@ function FooterLink({ href, label }: { href: string; label: string }) {
   );
 }
 
+// Social Icon with fill-up animation on hover (desktop) or long-press (mobile)
+function SocialIcon({ icon: Icon, label, href }: { icon: any; label: string; href: string }) {
+  const [isActive, setIsActive] = useState(false);
+  const touchTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const touchStartTimeRef = useRef<number>(0);
+
+  // Handle mouse enter (desktop hover)
+  const handleMouseEnter = () => {
+    setIsActive(true);
+  };
+
+  // Handle mouse leave (desktop)
+  const handleMouseLeave = () => {
+    setIsActive(false);
+  };
+
+  // Handle touch start (mobile)
+  const handleTouchStart = () => {
+    touchStartTimeRef.current = Date.now();
+    
+    touchTimerRef.current = setTimeout(() => {
+      // Long press detected (500ms)
+      setIsActive(true);
+    }, LONG_PRESS_DURATION);
+  };
+
+  // Handle touch end (mobile)
+  const handleTouchEnd = () => {
+    if (touchTimerRef.current) {
+      clearTimeout(touchTimerRef.current);
+    }
+    
+    const touchDuration = Date.now() - touchStartTimeRef.current;
+    
+    // If it was a quick tap (less than 500ms), clear the active state
+    if (touchDuration < LONG_PRESS_DURATION) {
+      setIsActive(false);
+    }
+  };
+
+  // Handle touch move (cancel long press if finger moves)
+  const handleTouchMove = () => {
+    if (touchTimerRef.current) {
+      clearTimeout(touchTimerRef.current);
+      setIsActive(false);
+    }
+  };
+
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={label}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      onTouchMove={handleTouchMove}
+      className="relative w-9 h-9 border border-card/20 flex items-center justify-center text-card/40 transition-colors cursor-pointer overflow-hidden"
+      style={{
+        borderColor: isActive ? "hsl(14 56% 49%)" : "rgba(248,245,240,0.2)",
+      }}
+    >
+      {/* Background fill that animates from bottom to top */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          top: 0,
+          background: "hsl(14 56% 49%)",
+          transform: isActive ? "scaleY(1)" : "scaleY(0)",
+          transformOrigin: "bottom",
+          transition: "transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
+          zIndex: 0,
+          pointerEvents: "none",
+        }}
+      />
+      
+      {/* Icon that stays on top */}
+      <div
+        style={{
+          position: "relative",
+          zIndex: 1,
+          color: isActive ? "hsl(36 38% 97%)" : "rgba(248,245,240,0.4)",
+          transition: "color 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
+        }}
+      >
+        <Icon className="w-4 h-4" />
+      </div>
+    </a>
+  );
+}
+
 // Letter mask component with image reveal on hover (desktop) or long-press (mobile)
 function LetterMaskText({ text, images }: { text: string; images: string[] }) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -222,19 +318,10 @@ export default function Footer() {
           </div>
           <p className="section-label text-card/20 mt-2">MahaRERA Reg. No.<br />P51800028099</p>
 
-          {/* Social icons */}
+          {/* Social icons with fill-up animation */}
           <div className="flex gap-3 mt-3">
-            {SOCIAL.map(({ icon: Icon, label, href }) => (
-              <a
-                key={label}
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={label}
-                className="w-9 h-9 border border-card/20 flex items-center justify-center text-card/40 hover:text-primary hover:border-primary transition-colors cursor-pointer"
-              >
-                <Icon className="w-4 h-4" />
-              </a>
+            {SOCIAL.map(({ icon, label, href }) => (
+              <SocialIcon key={label} icon={icon} label={label} href={href} />
             ))}
           </div>
         </div>
