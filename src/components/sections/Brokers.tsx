@@ -18,7 +18,6 @@ function BrokerCard({ broker, index }: { broker: (typeof team)[0]; index: number
       transition={{ duration: 0.5, delay: index * 0.1 }}
       onHoverStart={() => setHovered(true)}
       onHoverEnd={() => setHovered(false)}
-      onTap={() => setHovered(h => !h)}
       className="border-[3px] border-foreground bg-card overflow-hidden flex flex-col bs"
     >
       {/* Photo — B&W, turns colour on hover */}
