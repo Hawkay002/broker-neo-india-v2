@@ -138,8 +138,23 @@ export default function Footer() {
         </div>
       </div>
 
+      {/* BRUT | MUMBAI stroke watermark */}
+      <div className="border-t-[3px] border-card/10 px-5 md:px-10 py-6 md:py-8 overflow-hidden">
+        <p
+          className="font-sans font-extrabold tracking-[-0.02em] leading-none select-none text-center whitespace-nowrap"
+          style={{
+            fontSize: "clamp(38px, 9.5vw, 108px)",
+            WebkitTextStroke: "1.5px rgba(248,245,240,0.18)",
+            color: "transparent",
+          }}
+          aria-hidden="true"
+        >
+          BRUT &nbsp;।&nbsp; MUMBAI
+        </p>
+      </div>
+
       {/* Bottom bar */}
-      <div className="px-5 md:px-10 py-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
+      <div className="border-t-[3px] border-card/10 px-5 md:px-10 py-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
         <p className="font-mono text-[10px] text-card/25 tracking-[0.12em]">
           © {YEAR} BRUT Realty Pvt. Ltd. · All rights reserved · Mumbai, Maharashtra
         </p>
