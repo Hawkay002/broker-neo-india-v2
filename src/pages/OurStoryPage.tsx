@@ -61,6 +61,22 @@ export default function OurStoryPage() {
           crumb="Our Story"
         />
 
+        {/* Story image banner */}
+        <section className="border-b-[3px] border-foreground relative overflow-hidden" style={{ height: "clamp(200px, 35vw, 420px)" }}>
+          <img
+            src="https://images.unsplash.com/photo-1570168007204-dfb528c6958f?w=1600&q=85"
+            alt="Mumbai cityscape at golden hour"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-foreground/70 via-foreground/30 to-transparent" />
+          <div className="absolute bottom-6 left-5 md:left-10">
+            <span className="watermark-dark font-sans font-extrabold text-card/90 leading-none"
+              style={{ fontSize: "clamp(48px, 8vw, 96px)", WebkitTextStroke: "1.5px rgba(248,245,240,0.4)", color: "transparent" }}>
+              SINCE 2009
+            </span>
+          </div>
+        </section>
+
         {/* Timeline */}
         <section className="border-b-[3px] border-foreground px-5 md:px-10 py-12 md:py-16">
           <h2 className="font-sans font-extrabold text-2xl md:text-3xl tracking-tight mb-10">The Timeline</h2>
