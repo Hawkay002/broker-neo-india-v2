@@ -34,7 +34,7 @@ export default function Hero() {
 
           <motion.div variants={stagger} initial="hidden" animate="show" className="relative z-10 flex flex-col items-center md:items-start text-center md:text-left">
             {/* Stamp */}
-            <motion.div variants={fadeUp} className="mb-6">
+            <motion.div variants={fadeUp} className="mb-6 self-start">
               <div className="stamp w-14 h-14 md:w-16 md:h-16 rounded-full border-[3px] border-primary-foreground flex flex-col items-center justify-center">
                 <p className="font-mono font-bold text-primary-foreground leading-tight text-center" style={{ fontSize: "8px", letterSpacing: "0.18em" }}>
                   BRUT<br />MUM
