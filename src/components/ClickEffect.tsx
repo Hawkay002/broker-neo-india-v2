@@ -16,27 +16,23 @@ export const ClickEffect = () => {
   useEffect(() => {
     const getLuminance = (color: string) => {
       const rgb = color.match(/\d+/g);
-      if (!rgb || rgb.length < 3) return 0.5; // Default to mid-range
+      if (!rgb || rgb.length < 3) return 0.5;
       const r = parseInt(rgb[0]) / 255;
       const g = parseInt(rgb[1]) / 255;
       const b = parseInt(rgb[2]) / 255;
-      // Standard luminance formula
       return 0.2126 * r + 0.7152 * g + 0.0722 * b;
     };
 
     const getAdaptiveColor = (x: number, y: number) => {
-      // Get the element at the click position
       const element = document.elementFromPoint(x, y);
-      if (!element) return 'hsl(14 56% 49%)'; // Default terracotta
+      if (!element) return '#C6633F'; // Default terracotta
 
-      // Get computed background color
       let currentElement: Element | null = element;
-      let bgColor = 'rgb(255, 255, 255)'; // Default fallback
+      let bgColor = 'rgb(255, 255, 255)';
 
       while (currentElement) {
         const style = window.getComputedStyle(currentElement);
         const bg = style.backgroundColor;
-        // Check if background is not transparent
         if (bg !== 'rgba(0, 0, 0, 0)' && bg !== 'transparent' && bg !== 'initial') {
           bgColor = bg;
           break;
@@ -46,10 +42,10 @@ export const ClickEffect = () => {
 
       const luminance = getLuminance(bgColor);
       
-      // If background is dark, use light theme color (cream/white)
-      // If background is light, use dark theme color (dark brown/terracotta)
+      // If background is dark, use terracotta
+      // If background is light, use dark brown
       if (luminance < 0.5) {
-        return '#F8F5F0'; // Light cream (website theme)
+        return '#C6633F'; // Terracotta (website theme)
       } else {
         return '#2D2318'; // Dark brown (website theme)
       }
@@ -100,11 +96,8 @@ export const ClickEffect = () => {
         const easeOut = 1 - Math.pow(1 - progress, 3);
         const opacity = Math.max(0, 1 - easeOut);
         const scale = 1 + easeOut * 1.5;
-
-        // Use the adaptive color
         const color = effect.color;
 
-        // Outer ring
         const ring1 = container.querySelector('.ring-1') || (() => {
           const r = document.createElement('div');
           r.className = 'ring-1';
@@ -129,7 +122,6 @@ export const ClickEffect = () => {
         `
         );
 
-        // Inner ring
         const ring2 = container.querySelector('.ring-2') || (() => {
           const r = document.createElement('div');
           r.className = 'ring-2';
@@ -153,7 +145,6 @@ export const ClickEffect = () => {
         `
         );
 
-        // Horizontal line
         const hLine = container.querySelector('.h-line') || (() => {
           const h = document.createElement('div');
           h.className = 'h-line';
@@ -177,7 +168,6 @@ export const ClickEffect = () => {
         `
         );
 
-        // Vertical line
         const vLine = container.querySelector('.v-line') || (() => {
           const v = document.createElement('div');
           v.className = 'v-line';
