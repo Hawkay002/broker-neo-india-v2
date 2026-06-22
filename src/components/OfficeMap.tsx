@@ -150,6 +150,39 @@ export default function OfficeMap() {
     marker.togglePopup();
     transitMarkerRef.current = marker;
 
+    // Add terracotta path connecting office to transit stop
+    if (map.getSource("transit-route")) {
+      map.removeLayer("transit-route-line");
+      map.removeSource("transit-route");
+    }
+
+    const routeGeometry = {
+      type: "Feature" as const,
+      properties: {},
+      geometry: {
+        type: "LineString" as const,
+        coordinates: [OFFICE_COORDS, stop.coords],
+      },
+    };
+
+    map.addSource("transit-route", {
+      type: "geojson",
+      data: routeGeometry,
+    });
+
+    map.addLayer({
+      id: "transit-route-line",
+      type: "line",
+      source: "transit-route",
+      layout: { "line-join": "round", "line-cap": "round" },
+      paint: {
+        "line-color": "#c6633f",
+        "line-width": 3,
+        "line-opacity": 0.8,
+        "line-dasharray": [4, 4],
+      },
+    });
+
     const bounds = new maplibregl.LngLatBounds();
     bounds.extend(OFFICE_COORDS);
     bounds.extend(stop.coords);
@@ -219,10 +252,14 @@ export default function OfficeMap() {
           setFootInfo({ distance: distStr, duration: durStr });
           setGeoStatus("idle");
 
-          if (map.getSource("route")) {
-            map.removeLayer("route-line");
-            map.removeSource("route");
-          }
+    if (map.getSource("route")) {
+      map.removeLayer("route-line");
+      map.removeSource("route");
+    }
+    if (map.getSource("transit-route")) {
+      map.removeLayer("transit-route-line");
+      map.removeSource("transit-route");
+    }
 
           map.addSource("route", {
             type: "geojson",
