@@ -5,6 +5,7 @@ interface ClickRing {
   x: number;
   y: number;
   age: number;
+  color: string;
 }
 
 export const ClickEffect = () => {
@@ -13,12 +14,56 @@ export const ClickEffect = () => {
   const animationFrameRef = useRef<number>();
 
   useEffect(() => {
+    const getLuminance = (color: string) => {
+      const rgb = color.match(/\d+/g);
+      if (!rgb || rgb.length < 3) return 0.5; // Default to mid-range
+      const r = parseInt(rgb[0]) / 255;
+      const g = parseInt(rgb[1]) / 255;
+      const b = parseInt(rgb[2]) / 255;
+      // Standard luminance formula
+      return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    };
+
+    const getAdaptiveColor = (x: number, y: number) => {
+      // Get the element at the click position
+      const element = document.elementFromPoint(x, y);
+      if (!element) return 'hsl(14 56% 49%)'; // Default terracotta
+
+      // Get computed background color
+      let currentElement: Element | null = element;
+      let bgColor = 'rgb(255, 255, 255)'; // Default fallback
+
+      while (currentElement) {
+        const style = window.getComputedStyle(currentElement);
+        const bg = style.backgroundColor;
+        // Check if background is not transparent
+        if (bg !== 'rgba(0, 0, 0, 0)' && bg !== 'transparent' && bg !== 'initial') {
+          bgColor = bg;
+          break;
+        }
+        currentElement = currentElement.parentElement;
+      }
+
+      const luminance = getLuminance(bgColor);
+      
+      // If background is dark, use light theme color (cream/white)
+      // If background is light, use dark theme color (dark brown/terracotta)
+      if (luminance < 0.5) {
+        return '#F8F5F0'; // Light cream (website theme)
+      } else {
+        return '#2D2318'; // Dark brown (website theme)
+      }
+    };
+
     const handleClick = (e: MouseEvent) => {
+      const adaptiveColor = getAdaptiveColor(e.clientX, e.clientY);
+      
       const clickEffect: ClickRing = {
         id: clickIdRef.current++,
         x: e.clientX,
         y: e.clientY,
         age: 0,
+        color: adaptiveColor,
       };
 
       clickEffectsRef.current.push(clickEffect);
@@ -26,7 +71,6 @@ export const ClickEffect = () => {
     };
 
     const animate = () => {
-      // Update click effects
       clickEffectsRef.current = clickEffectsRef.current
         .map((c) => ({ ...c, age: c.age + 1 }))
         .filter((c) => c.age < 40);
@@ -36,14 +80,12 @@ export const ClickEffect = () => {
     };
 
     const renderClickEffects = () => {
-      // Remove old effects from DOM
       document.querySelectorAll('.click-effect').forEach((el) => {
         if (!clickEffectsRef.current.find((c) => c.id === parseInt(el.getAttribute('data-click-id') || '-1'))) {
           el.remove();
         }
       });
 
-      // Add/update click effects
       clickEffectsRef.current.forEach((effect) => {
         let container = document.querySelector(`[data-click-id="${effect.id}"]`);
 
@@ -58,6 +100,9 @@ export const ClickEffect = () => {
         const easeOut = 1 - Math.pow(1 - progress, 3);
         const opacity = Math.max(0, 1 - easeOut);
         const scale = 1 + easeOut * 1.5;
+
+        // Use the adaptive color
+        const color = effect.color;
 
         // Outer ring
         const ring1 = container.querySelector('.ring-1') || (() => {
@@ -75,12 +120,12 @@ export const ClickEffect = () => {
           top: ${effect.y}px;
           width: 24px;
           height: 24px;
-          border: 1.5px solid hsl(14 56% 49%);
+          border: 1.5px solid ${color};
           opacity: ${opacity * 0.9};
           transform: translate(-50%, -50%) scale(${scale});
           pointer-events: none;
           z-index: 9999;
-          box-shadow: 0 0 12px hsl(14 56% 49% / ${opacity * 0.3});
+          box-shadow: 0 0 12px ${color} / ${opacity * 0.3};
         `
         );
 
@@ -100,7 +145,7 @@ export const ClickEffect = () => {
           top: ${effect.y}px;
           width: 14px;
           height: 14px;
-          border: 1px solid hsl(14 56% 49%);
+          border: 1px solid ${color};
           opacity: ${opacity * 0.6};
           transform: translate(-50%, -50%) scale(${scale * 0.6});
           pointer-events: none;
@@ -124,7 +169,7 @@ export const ClickEffect = () => {
           top: ${effect.y}px;
           width: 16px;
           height: 0.75px;
-          background: linear-gradient(90deg, transparent, hsl(14 56% 49%), transparent);
+          background: linear-gradient(90deg, transparent, ${color}, transparent);
           opacity: ${opacity * 0.5};
           transform: translate(-50%, -50%) scaleX(${scale});
           pointer-events: none;
@@ -148,7 +193,7 @@ export const ClickEffect = () => {
           top: ${effect.y}px;
           width: 0.75px;
           height: 16px;
-          background: linear-gradient(180deg, transparent, hsl(14 56% 49%), transparent);
+          background: linear-gradient(180deg, transparent, ${color}, transparent);
           opacity: ${opacity * 0.5};
           transform: translate(-50%, -50%) scaleY(${scale});
           pointer-events: none;
@@ -166,7 +211,6 @@ export const ClickEffect = () => {
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
-      // Clean up all click effect elements
       document.querySelectorAll('.click-effect').forEach((el) => el.remove());
     };
   }, []);
