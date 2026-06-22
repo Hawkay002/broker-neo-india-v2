@@ -2,6 +2,7 @@ import { Link } from "wouter";
 import { Instagram, Linkedin, Twitter, Youtube } from "lucide-react";
 import { useState, useRef } from "react";
 import { motion } from "framer-motion";
+import FillUpText from "@/components/FillUpText";
 
 const YEAR = new Date().getFullYear();
 
@@ -281,12 +282,21 @@ export default function Footer() {
       </div>
 
       <div className="border-t-[3px] border-card/10 px-5 md:px-10 py-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
-        <p className="font-mono text-[10px] text-card/25 tracking-[0.12em]">
-          © {YEAR} BRUT Realty Pvt. Ltd. · All rights reserved · Mumbai, Maharashtra
-        </p>
+        <div className="flex flex-col gap-1">
+          <p className="font-mono text-[10px] text-card/25 tracking-[0.12em]">
+            © {YEAR} BRUT Realty Pvt. Ltd. · All rights reserved · Mumbai, Maharashtra
+          </p>
+          <p className="font-mono text-[10px] text-card/30 tracking-[0.12em] flex items-center gap-1">
+            Crafted with care by <FillUpText text="SHOVITH" href="https://wa.me/918777845713" className="font-bold text-card/60" />
+          </p>
+        </div>
         <div className="flex items-center gap-4 flex-wrap">
           {LEGAL.map((l) => (
-            <Link key={l.label} to={l.href} className="font-mono text-[10px] text-card/30 hover:text-primary transition-colors duration-150 tracking-[0.12em] cursor-pointer">
+            <Link
+              key={l.label}
+              to={l.href}
+              className="font-mono text-[10px] text-card/30 hover:text-primary transition-colors duration-150 tracking-[0.12em] cursor-pointer"
+            >
               {l.label}
             </Link>
           ))}
