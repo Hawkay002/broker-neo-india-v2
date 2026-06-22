@@ -65,7 +65,7 @@ export default function Footer() {
             style={{ fontSize: "clamp(36px, 7vw, 80px)" }}
           >
             Ready to<br />
-            <span style={{ WebkitTextStroke: "2px rgba(248,245,240,0.25)", color: "transparent" }}>
+            <span style={{ WebkitTextStroke: "2px rgba(248,245,240,0.25)", WebkitTextFillColor: "transparent", color: "transparent" }}>
               find yours?
             </span>
           </h2>
@@ -144,7 +144,8 @@ export default function Footer() {
           className="font-sans font-extrabold tracking-[-0.02em] leading-none select-none text-center whitespace-nowrap"
           style={{
             fontSize: "clamp(38px, 9.5vw, 108px)",
-            WebkitTextStroke: "1.5px rgba(248,245,240,0.18)",
+            WebkitTextStroke: "1.5px rgba(248,245,240,0.38)",
+            WebkitTextFillColor: "transparent",
             color: "transparent",
           }}
           aria-hidden="true"
