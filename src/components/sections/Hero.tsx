@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "wouter";
+import { BedDouble, Bath, Maximize2 } from "lucide-react";
 import { Hero3D } from "@/components/Scene3D";
 
 const fadeUp = { hidden: { opacity: 0, y: 28 }, show: { opacity: 1, y: 0 } };
@@ -125,11 +126,11 @@ export default function Hero() {
             <p className="font-sans font-bold text-lg leading-tight mb-1">The Worli Sea Face Penthouse</p>
             <p className="font-mono text-xs text-card/50 mb-3">Worli, Mumbai</p>
             <div className="flex items-center gap-3 font-mono text-[11px] text-card/60 mb-3">
-              <span>4 Bed</span>
+              <span className="flex items-center gap-1"><BedDouble className="w-3.5 h-3.5 text-primary" />4 Bed</span>
               <span className="text-card/20">·</span>
-              <span>4.5 Bath</span>
+              <span className="flex items-center gap-1"><Bath className="w-3.5 h-3.5 text-primary" />4.5 Bath</span>
               <span className="text-card/20">·</span>
-              <span>4,200 sq.ft.</span>
+              <span className="flex items-center gap-1"><Maximize2 className="w-3.5 h-3.5 text-primary" />4,200 sq.ft.</span>
             </div>
             <div className="flex items-center justify-between">
               <span className="font-mono font-bold text-lg text-primary">₹8,50,000<span className="text-card/40 font-normal text-xs">/mo</span></span>
