@@ -4,6 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { useEffect } from "react";
 import ScrollToTopButton from "@/components/ScrollToTopButton";
+import { ClickEffect } from "@/components/ClickEffect";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/Home";
 import AboutPage from "@/pages/AboutPage";
@@ -73,6 +74,7 @@ function App() {
           <Router />
         </WouterRouter>
         <ScrollToTopButton />
+        <ClickEffect />
         <Toaster />
       </TooltipProvider>
     </QueryClientProvider>
