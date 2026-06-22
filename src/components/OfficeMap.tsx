@@ -5,12 +5,33 @@ import { Bus, Train, Footprints, Navigation } from "lucide-react";
 
 type RouteType = "bus" | "train" | "foot" | null;
 
+const OFFICE_COORDS: [number, number] = [72.8265, 18.9968];
+
+const TRANSIT_STOPS = {
+  bus: {
+    name: "Senapati Bapat Marg Bus Stop",
+    subtitle: "Nearest bus stop · ~2 min walk",
+    coords: [72.8270, 18.9955] as [number, number],
+    color: "#c6633f",
+    label: "BUS",
+  },
+  train: {
+    name: "Lower Parel Railway Station",
+    subtitle: "Western Railway · ~8 min walk",
+    coords: [72.8315, 18.9941] as [number, number],
+    color: "#2D2318",
+    label: "TRN",
+  },
+};
+
 export default function OfficeMap() {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
+  const transitMarkerRef = useRef<maplibregl.Marker | null>(null);
+  const userMarkerRef = useRef<maplibregl.Marker | null>(null);
   const [activeRoute, setActiveRoute] = useState<RouteType>(null);
-
-  const OFFICE_COORDS: [number, number] = [72.8265, 18.9968]; // [lng, lat] for MapLibre
+  const [footInfo, setFootInfo] = useState<{ distance: string; duration: string } | null>(null);
+  const [geoStatus, setGeoStatus] = useState<"idle" | "loading" | "error">("idle");
 
   useEffect(() => {
     if (!mapContainerRef.current || mapRef.current) return;
@@ -25,7 +46,6 @@ export default function OfficeMap() {
     map.addControl(new maplibregl.NavigationControl(), "top-right");
 
     map.on("load", () => {
-      // Custom Marker for Office
       const el = document.createElement("div");
       el.className = "brut-marker";
       el.innerHTML = `
@@ -74,101 +94,206 @@ export default function OfficeMap() {
     };
   }, []);
 
-  const fetchRoute = async (type: RouteType) => {
-    if (!type) return;
+  const clearOverlays = () => {
+    if (transitMarkerRef.current) {
+      transitMarkerRef.current.remove();
+      transitMarkerRef.current = null;
+    }
+    if (userMarkerRef.current) {
+      userMarkerRef.current.remove();
+      userMarkerRef.current = null;
+    }
+    const map = mapRef.current;
+    if (map?.getSource("route")) {
+      map.removeLayer("route-line");
+      map.removeSource("route");
+    }
+    setFootInfo(null);
+    setGeoStatus("idle");
+  };
+
+  const showTransitStop = (type: "bus" | "train") => {
+    clearOverlays();
     setActiveRoute(type);
 
-    const startCoords: [number, number] = [72.8300, 18.9900];
-    const profile = type === "foot" ? "foot" : type === "train" ? "car" : "car";
-    
-    try {
-      const response = await fetch(
-        `https://router.project-osrm.org/route/v1/${profile}/${startCoords[0]},${startCoords[1]};${OFFICE_COORDS[0]},${OFFICE_COORDS[1]}?overview=full&geometries=geojson`
-      );
-      const data = await response.json();
-      const route = data.routes[0].geometry;
+    const map = mapRef.current;
+    if (!map) return;
 
-      if (!mapRef.current) return;
+    const stop = TRANSIT_STOPS[type];
 
-      if (mapRef.current.getSource("route")) {
-        mapRef.current.removeLayer("route-line");
-        mapRef.current.removeSource("route");
-      }
+    const el = document.createElement("div");
+    el.innerHTML = `<div style="
+      width:38px;height:38px;
+      background:${stop.color};
+      border:3px solid #2D2318;
+      box-shadow:3px 3px 0 #2D2318;
+      display:flex;align-items:center;justify-content:center;
+      font-family:'DM Mono',monospace;
+      font-weight:700;font-size:9px;
+      color:#F8F5F0;
+      letter-spacing:0.1em;
+      cursor:pointer;
+    ">${stop.label}</div>`;
 
-      mapRef.current.addSource("route", {
-        type: "geojson",
-        data: {
-          type: "Feature",
-          properties: {},
-          geometry: route,
-        },
-      });
+    const marker = new maplibregl.Marker({ element: el })
+      .setLngLat(stop.coords)
+      .setPopup(
+        new maplibregl.Popup({ offset: 25 }).setHTML(`
+          <div style="font-family:'Space Grotesk',sans-serif;padding:6px 2px;">
+            <strong style="font-size:13px;display:block;margin-bottom:4px;color:#2D2318;">${stop.name}</strong>
+            <span style="font-size:11px;color:#7a6a5a;font-family:'DM Mono',monospace;">${stop.subtitle}</span>
+          </div>
+        `)
+      )
+      .addTo(map);
 
-      mapRef.current.addLayer({
-        id: "route-line",
-        type: "line",
-        source: "route",
-        layout: {
-          "line-join": "round",
-          "line-cap": "round",
-        },
-        paint: {
-          "line-color": type === "bus" ? "#c6633f" : type === "train" ? "#2D2318" : "#f8f5f0",
-          "line-width": 4,
-        },
-      });
+    marker.togglePopup();
+    transitMarkerRef.current = marker;
 
-      const bounds = new maplibregl.LngLatBounds();
-      route.coordinates.forEach((coord: [number, number]) => bounds.extend(coord));
-      mapRef.current.fitBounds(bounds, { padding: 50, duration: 1000 });
+    const bounds = new maplibregl.LngLatBounds();
+    bounds.extend(OFFICE_COORDS);
+    bounds.extend(stop.coords);
+    map.fitBounds(bounds, { padding: 100, duration: 800 });
+  };
 
-    } catch (e) {
-      console.error("Routing error:", e);
+  const showFootRoute = () => {
+    clearOverlays();
+    setActiveRoute("foot");
+    setGeoStatus("loading");
+
+    if (!navigator.geolocation) {
+      setGeoStatus("error");
+      return;
     }
+
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        const userCoords: [number, number] = [pos.coords.longitude, pos.coords.latitude];
+        const map = mapRef.current;
+        if (!map) return;
+
+        const userEl = document.createElement("div");
+        userEl.innerHTML = `<div style="
+          width:36px;height:36px;
+          background:#F8F5F0;
+          border:3px solid #2D2318;
+          box-shadow:3px 3px 0 #2D2318;
+          display:flex;align-items:center;justify-content:center;
+          font-family:'DM Mono',monospace;
+          font-weight:700;font-size:8px;
+          color:#2D2318;
+          letter-spacing:0.08em;
+        ">YOU</div>`;
+
+        const userMarker = new maplibregl.Marker({ element: userEl })
+          .setLngLat(userCoords)
+          .setPopup(
+            new maplibregl.Popup({ offset: 20 }).setHTML(`
+              <div style="font-family:'Space Grotesk',sans-serif;padding:4px 2px;">
+                <strong style="font-size:12px;color:#2D2318;">Your Location</strong>
+              </div>
+            `)
+          )
+          .addTo(map);
+        userMarkerRef.current = userMarker;
+
+        try {
+          const res = await fetch(
+            `https://router.project-osrm.org/route/v1/foot/${userCoords[0]},${userCoords[1]};${OFFICE_COORDS[0]},${OFFICE_COORDS[1]}?overview=full&geometries=geojson`
+          );
+          const data = await res.json();
+          const route = data.routes[0];
+          const geom = route.geometry;
+          const distM: number = route.distance;
+          const durS: number = route.duration;
+
+          const distStr =
+            distM < 1000
+              ? `${Math.round(distM)} m`
+              : `${(distM / 1000).toFixed(1)} km`;
+          const durStr =
+            durS < 60
+              ? `${Math.round(durS)} sec`
+              : `${Math.round(durS / 60)} min walk`;
+
+          setFootInfo({ distance: distStr, duration: durStr });
+          setGeoStatus("idle");
+
+          if (map.getSource("route")) {
+            map.removeLayer("route-line");
+            map.removeSource("route");
+          }
+
+          map.addSource("route", {
+            type: "geojson",
+            data: { type: "Feature", properties: {}, geometry: geom },
+          });
+          map.addLayer({
+            id: "route-line",
+            type: "line",
+            source: "route",
+            layout: { "line-join": "round", "line-cap": "round" },
+            paint: { "line-color": "#F8F5F0", "line-width": 4, "line-opacity": 0.9 },
+          });
+
+          const bounds = new maplibregl.LngLatBounds();
+          geom.coordinates.forEach((c: [number, number]) => bounds.extend(c));
+          map.fitBounds(bounds, { padding: 60, duration: 1000 });
+        } catch {
+          setGeoStatus("error");
+        }
+      },
+      () => {
+        setGeoStatus("error");
+      }
+    );
+  };
+
+  const resetMap = () => {
+    clearOverlays();
+    setActiveRoute(null);
+    mapRef.current?.flyTo({ center: OFFICE_COORDS, zoom: 15, duration: 1000 });
   };
 
   return (
     <div className="w-full border-t-[3px] border-foreground relative">
+      {/* Transit controls */}
       <div className="absolute bottom-3 left-3 z-[1001] flex flex-col gap-2">
         <button
-          onClick={() => fetchRoute("bus")}
+          onClick={() => showTransitStop("bus")}
           className={`p-2 border-2 border-foreground bg-card cursor-pointer transition-all bs-hover flex items-center gap-2 ${
             activeRoute === "bus" ? "bg-primary text-primary-foreground border-primary" : "text-foreground"
           }`}
-          title="Bus Route"
+          title="Nearest Bus Stop"
         >
           <Bus className="w-4 h-4" />
-          <span className="hidden md:block font-mono text-[10px] uppercase font-bold">Bus</span>
+          <span className="hidden md:block font-mono text-[10px] uppercase font-bold">Bus Stop</span>
         </button>
         <button
-          onClick={() => fetchRoute("train")}
+          onClick={() => showTransitStop("train")}
           className={`p-2 border-2 border-foreground bg-card cursor-pointer transition-all bs-hover flex items-center gap-2 ${
             activeRoute === "train" ? "bg-primary text-primary-foreground border-primary" : "text-foreground"
           }`}
-          title="Train Route"
+          title="Nearest Train Station"
         >
           <Train className="w-4 h-4" />
-          <span className="hidden md:block font-mono text-[10px] uppercase font-bold">Train</span>
+          <span className="hidden md:block font-mono text-[10px] uppercase font-bold">Train Stn</span>
         </button>
         <button
-          onClick={() => fetchRoute("foot")}
+          onClick={showFootRoute}
+          disabled={geoStatus === "loading"}
           className={`p-2 border-2 border-foreground bg-card cursor-pointer transition-all bs-hover flex items-center gap-2 ${
             activeRoute === "foot" ? "bg-primary text-primary-foreground border-primary" : "text-foreground"
-          }`}
-          title="Walk Route"
+          } ${geoStatus === "loading" ? "opacity-60 cursor-wait" : ""}`}
+          title="Walk from my location"
         >
           <Footprints className="w-4 h-4" />
-          <span className="hidden md:block font-mono text-[10px] uppercase font-bold">Walk</span>
+          <span className="hidden md:block font-mono text-[10px] uppercase font-bold">
+            {geoStatus === "loading" ? "Locating…" : "Walk"}
+          </span>
         </button>
         <button
-          onClick={() => {
-            setActiveRoute(null);
-            if (mapRef.current?.getSource("route")) {
-              mapRef.current.removeLayer("route-line");
-              mapRef.current.removeSource("route");
-            }
-            mapRef.current?.flyTo({ center: OFFICE_COORDS, zoom: 15, pitch: 45, duration: 1000 });
-          }}
+          onClick={resetMap}
           className="p-2 border-2 border-foreground bg-card cursor-pointer transition-all bs-hover text-foreground flex items-center gap-2"
           title="Reset View"
         >
@@ -177,12 +302,29 @@ export default function OfficeMap() {
         </button>
       </div>
 
+      {/* Walking distance info panel */}
+      {footInfo && (
+        <div className="absolute bottom-3 right-3 z-[1001] bg-foreground text-card px-4 py-3 border-2 border-primary">
+          <p className="section-label text-card/50 mb-1">Walking from your location</p>
+          <p className="font-sans font-extrabold text-xl leading-none text-primary">{footInfo.distance}</p>
+          <p className="font-mono text-[10px] text-card/60 mt-1 uppercase tracking-[0.15em]">{footInfo.duration}</p>
+        </div>
+      )}
+
+      {/* Geolocation error */}
+      {geoStatus === "error" && (
+        <div className="absolute bottom-3 right-3 z-[1001] bg-foreground text-card px-4 py-3 border-2 border-foreground/40">
+          <p className="font-mono text-[10px] text-card/60 uppercase tracking-[0.12em]">Location access denied</p>
+          <p className="font-mono text-[9px] text-card/40 mt-0.5">Allow location in browser settings</p>
+        </div>
+      )}
+
       <div
         ref={mapContainerRef}
         className="w-full"
         style={{ height: "clamp(340px, 45vw, 560px)" }}
       />
-      
+
       <div className="absolute top-3 left-3 z-[1001] bg-foreground text-card font-mono text-[10px] font-bold px-3 py-1.5 uppercase tracking-[0.2em] pointer-events-none">
         Lower Parel · Mumbai
       </div>
