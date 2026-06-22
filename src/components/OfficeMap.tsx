@@ -17,11 +17,9 @@ export default function OfficeMap() {
 
     const map = new maplibregl.Map({
       container: mapContainerRef.current,
-      style: "https://demotiles.maplibre.org/style.json", // Standard open style
+      style: "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
       center: OFFICE_COORDS,
       zoom: 15,
-      pitch: 45, // 3D perspective
-      bearing: -15,
     });
 
     map.addControl(new maplibregl.NavigationControl(), "top-right");
@@ -131,7 +129,7 @@ export default function OfficeMap() {
 
   return (
     <div className="w-full border-t-[3px] border-foreground relative">
-      <div className="absolute top-3 right-3 z-[1000] flex flex-col gap-2">
+      <div className="absolute bottom-3 left-3 z-[1001] flex flex-col gap-2">
         <button
           onClick={() => fetchRoute("bus")}
           className={`p-2 border-2 border-foreground bg-card cursor-pointer transition-all bs-hover flex items-center gap-2 ${
@@ -182,10 +180,10 @@ export default function OfficeMap() {
       <div
         ref={mapContainerRef}
         className="w-full"
-        style={{ height: "clamp(260px, 38vw, 420px)" }}
+        style={{ height: "clamp(340px, 45vw, 560px)" }}
       />
       
-      <div className="absolute top-3 left-3 z-[1000] bg-foreground text-card font-mono text-[10px] font-bold px-3 py-1.5 uppercase tracking-[0.2em] pointer-events-none">
+      <div className="absolute top-3 left-3 z-[1001] bg-foreground text-card font-mono text-[10px] font-bold px-3 py-1.5 uppercase tracking-[0.2em] pointer-events-none">
         Lower Parel · Mumbai
       </div>
     </div>
