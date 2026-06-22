@@ -1,5 +1,6 @@
 import { Link } from "wouter";
 import { Instagram, Linkedin, Twitter, Youtube } from "lucide-react";
+import { useState } from "react";
 
 const YEAR = new Date().getFullYear();
 
@@ -38,6 +39,20 @@ const SOCIAL = [
   { icon: Youtube, label: "YouTube", href: "https://youtube.com/@brutrealty" },
 ];
 
+// Image URLs from the data file (property images)
+const FOOTER_IMAGES = [
+  "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=85",
+  "https://images.unsplash.com/photo-1560185007-cde436f6a4d0?w=1200&q=85",
+  "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&q=85",
+  "https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=1200&q=85",
+  "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200&q=85",
+  "https://images.unsplash.com/photo-1613977257592-4871e5fcd7c4?w=1200&q=85",
+  "https://images.unsplash.com/photo-1605648916361-9bc12ad6a569?w=1200&q=85",
+  "https://images.unsplash.com/photo-1613416295741-8e3b1a2a6c9e?w=1200&q=85",
+  "https://images.unsplash.com/photo-1600210491892-03d54c0aaf87?w=1200&q=85",
+  "https://images.unsplash.com/photo-1605648916969-9f5a5a0a6c4a?w=1200&q=85",
+];
+
 function FooterLink({ href, label }: { href: string; label: string }) {
   const isInternal = href.startsWith("/") && !href.startsWith("/#");
   if (isInternal) {
@@ -51,6 +66,86 @@ function FooterLink({ href, label }: { href: string; label: string }) {
     <a href={href} className="font-sans text-sm text-card/55 hover:text-primary transition-colors duration-150 cursor-pointer block py-0.5 link-underline">
       {label}
     </a>
+  );
+}
+
+// Letter mask component with image reveal on hover
+function LetterMaskText({ text, images }: { text: string; images: string[] }) {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  return (
+    <div className="select-none font-sans font-extrabold leading-none text-center w-full relative"
+      style={{
+        fontSize: "clamp(44px, 14vw, 160px)",
+        letterSpacing: "0.08em",
+      }}
+    >
+      <div className="flex justify-center gap-0">
+        {text.split("").map((letter, index) => {
+          const imageUrl = images[index % images.length];
+          const isHovered = hoveredIndex === index;
+
+          return (
+            <div
+              key={index}
+              className="relative cursor-pointer transition-all duration-300"
+              onMouseEnter={() => setHoveredIndex(index)}
+              onMouseLeave={() => setHoveredIndex(null)}
+              style={{
+                position: "relative",
+                display: "inline-block",
+              }}
+            >
+              {/* Base outlined letter */}
+              <span
+                style={{
+                  WebkitTextStroke: "1.5px rgba(248,245,240,0.38)",
+                  WebkitTextFillColor: "transparent",
+                  color: "transparent",
+                  display: "inline-block",
+                  transition: "all 0.3s ease",
+                  opacity: isHovered ? 0 : 1,
+                }}
+              >
+                {letter}
+              </span>
+
+              {/* Image-filled letter on hover */}
+              {isHovered && (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "1em",
+                    height: "1em",
+                    backgroundImage: `url(${imageUrl})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    WebkitBackgroundClip: "text",
+                    backgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    color: "transparent",
+                    WebkitTextStroke: "none",
+                    display: "inline-block",
+                    animation: "fadeIn 0.3s ease",
+                  }}
+                >
+                  {letter}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      <style>{`
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+      `}</style>
+    </div>
   );
 }
 
@@ -138,38 +233,14 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* BRUT / MUMBAI — full-width stacked watermark above legal */}
+      {/* BRUT / MUMBAI — full-width stacked watermark with image reveal on hover */}
       <div className="border-t-[3px] border-card/10 w-full overflow-hidden leading-none py-1">
         <div style={{ transform: "scaleX(1.32)", transformOrigin: "center" }}>
-          <p
-            className="select-none font-sans font-extrabold leading-none text-center w-full"
-            style={{
-              fontSize: "clamp(44px, 14vw, 160px)",
-              letterSpacing: "0.08em",
-              WebkitTextStroke: "1.5px rgba(248,245,240,0.38)",
-              WebkitTextFillColor: "transparent",
-              color: "transparent",
-            }}
-            aria-hidden="true"
-          >
-            BRUT
-          </p>
+          <LetterMaskText text="BRUT" images={FOOTER_IMAGES} />
         </div>
         <div className="w-full border-t-[2px] border-card/20 my-1" aria-hidden="true" />
         <div style={{ transform: "scaleX(1.32)", transformOrigin: "center" }}>
-          <p
-            className="select-none font-sans font-extrabold leading-none text-center w-full"
-            style={{
-              fontSize: "clamp(44px, 14vw, 160px)",
-              letterSpacing: "0.08em",
-              WebkitTextStroke: "1.5px rgba(248,245,240,0.38)",
-              WebkitTextFillColor: "transparent",
-              color: "transparent",
-            }}
-            aria-hidden="true"
-          >
-            MUMBAI
-          </p>
+          <LetterMaskText text="MUMBAI" images={FOOTER_IMAGES} />
         </div>
       </div>
 
