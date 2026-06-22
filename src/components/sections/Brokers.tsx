@@ -30,7 +30,7 @@ function BrokerCard({ broker, index }: { broker: (typeof team)[0]; index: number
           {broker.experience}
         </div>
         {/* Specialty strip — slides up on hover */}
-        <div className="absolute bottom-0 left-0 right-0 bg-primary text-primary-foreground px-4 py-3 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+        <div className="broker-specialty absolute bottom-0 left-0 right-0 bg-primary text-primary-foreground px-4 py-3 translate-y-full group-hover:translate-y-0 transition-transform duration-300" style={{ willChange: "transform" }}>
           <p className="section-label text-primary-foreground/70 mb-0.5">Specialisation</p>
           <p className="font-bold text-sm">{broker.specialization}</p>
         </div>

@@ -52,19 +52,17 @@ function PortfolioItem({
         }`}
       />
       {/* Slide-reveal overlay — label slides up from bottom on hover */}
-      <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3 md:p-4 pointer-events-none">
-        <motion.div
-          initial={false}
-          animate={false}
-          className="translate-y-full group-hover:translate-y-0 transition-transform duration-400"
-          style={{ transitionDuration: "400ms", transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)" }}
+      <div className="gallery-overlay absolute inset-0 bg-gradient-to-t from-foreground/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3 md:p-4 pointer-events-none">
+        <div
+          className="gallery-label translate-y-full group-hover:translate-y-0 transition-transform"
+          style={{ transitionDuration: "400ms", transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)", willChange: "transform" }}
         >
           <span className="bg-primary text-primary-foreground font-mono text-[9px] font-bold uppercase tracking-[0.18em] px-2 py-0.5 block w-fit mb-1">
             {img.category}
           </span>
           <p className="text-card font-bold text-xs md:text-sm leading-tight">{img.label}</p>
           <p className="text-card/60 font-mono text-[9px] uppercase tracking-[0.15em] mt-0.5">{img.property}</p>
-        </motion.div>
+        </div>
       </div>
       {/* Category tag — always visible as small pill */}
       <div className="absolute top-3 left-3 z-10">

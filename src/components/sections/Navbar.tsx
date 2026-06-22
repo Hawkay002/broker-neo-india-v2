@@ -87,7 +87,7 @@ export default function Navbar() {
                 <span className="relative z-10 transition-colors duration-150 group-hover:text-primary-foreground">
                   {item.label}
                 </span>
-                <span className="absolute inset-0 bg-primary scale-x-0 group-hover:scale-x-100 transition-transform duration-250 origin-left" />
+                <span className="absolute inset-0 bg-primary scale-x-0 group-hover:scale-x-100 transition-transform duration-[250ms] origin-left" />
               </Link>
             ))}
 
@@ -104,7 +104,7 @@ export default function Navbar() {
                 <span className="relative z-10 transition-colors duration-150 group-hover:text-primary-foreground">
                   {item.label}
                 </span>
-                <span className="absolute inset-0 bg-primary scale-x-0 group-hover:scale-x-100 transition-transform duration-250 origin-left" />
+                <span className="absolute inset-0 bg-primary scale-x-0 group-hover:scale-x-100 transition-transform duration-[250ms] origin-left" />
               </a>
             ))}
           </nav>
