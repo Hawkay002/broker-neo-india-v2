@@ -27,7 +27,7 @@ export default function Hero() {
           <span
             aria-hidden
             className="watermark absolute bottom-8 md:bottom-14 left-0 right-0 text-center select-none"
-            style={{ fontSize: "clamp(72px, 15vw, 180px)" }}
+            style={{ fontSize: "clamp(110px, 22vw, 200px)" }}
           >
             MUMBAI
           </span>
