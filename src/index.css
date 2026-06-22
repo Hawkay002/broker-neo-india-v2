@@ -251,6 +251,10 @@ body::before {
     opacity: 1 !important;
     background: linear-gradient(to top, rgba(45,35,24,0.60), transparent) !important;
   }
+  /* Show broker photos in colour on mobile (no hover available) */
+  .broker-photo {
+    filter: grayscale(0%) !important;
+  }
 }
 
 /* ─── LEAFLET MAP BRANDING ─── */
