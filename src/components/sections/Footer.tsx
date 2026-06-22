@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import { Instagram, Linkedin, Twitter, Youtube } from "lucide-react";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 const YEAR = new Date().getFullYear();
 
@@ -53,6 +53,9 @@ const FOOTER_IMAGES = [
   "https://images.unsplash.com/photo-1605648916969-9f5a5a0a6c4a?w=1200&q=85",
 ];
 
+// Long-press threshold in milliseconds
+const LONG_PRESS_DURATION = 500;
+
 function FooterLink({ href, label }: { href: string; label: string }) {
   const isInternal = href.startsWith("/") && !href.startsWith("/#");
   if (isInternal) {
@@ -69,9 +72,53 @@ function FooterLink({ href, label }: { href: string; label: string }) {
   );
 }
 
-// Letter mask component with image reveal on hover
+// Letter mask component with image reveal on hover (desktop) or long-press (mobile)
 function LetterMaskText({ text, images }: { text: string; images: string[] }) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const touchTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const touchStartTimeRef = useRef<number>(0);
+
+  // Handle mouse enter (desktop hover)
+  const handleMouseEnter = (index: number) => {
+    setHoveredIndex(index);
+  };
+
+  // Handle mouse leave (desktop)
+  const handleMouseLeave = () => {
+    setHoveredIndex(null);
+  };
+
+  // Handle touch start (mobile)
+  const handleTouchStart = (index: number) => {
+    touchStartTimeRef.current = Date.now();
+    
+    touchTimerRef.current = setTimeout(() => {
+      // Long press detected (500ms)
+      setHoveredIndex(index);
+    }, LONG_PRESS_DURATION);
+  };
+
+  // Handle touch end (mobile)
+  const handleTouchEnd = () => {
+    if (touchTimerRef.current) {
+      clearTimeout(touchTimerRef.current);
+    }
+    
+    const touchDuration = Date.now() - touchStartTimeRef.current;
+    
+    // If it was a quick tap (less than 500ms), clear the hover state
+    if (touchDuration < LONG_PRESS_DURATION) {
+      setHoveredIndex(null);
+    }
+  };
+
+  // Handle touch move (cancel long press if finger moves)
+  const handleTouchMove = () => {
+    if (touchTimerRef.current) {
+      clearTimeout(touchTimerRef.current);
+      setHoveredIndex(null);
+    }
+  };
 
   return (
     <div className="select-none font-sans font-extrabold leading-none text-center w-full relative"
@@ -88,12 +135,16 @@ function LetterMaskText({ text, images }: { text: string; images: string[] }) {
           return (
             <div
               key={index}
-              className="relative cursor-pointer transition-all duration-300"
-              onMouseEnter={() => setHoveredIndex(index)}
-              onMouseLeave={() => setHoveredIndex(null)}
+              className="relative cursor-pointer transition-all duration-300 select-none"
+              onMouseEnter={() => handleMouseEnter(index)}
+              onMouseLeave={handleMouseLeave}
+              onTouchStart={() => handleTouchStart(index)}
+              onTouchEnd={handleTouchEnd}
+              onTouchMove={handleTouchMove}
               style={{
                 position: "relative",
                 display: "inline-block",
+                userSelect: "none",
               }}
             >
               {/* Base outlined letter */}
@@ -110,7 +161,7 @@ function LetterMaskText({ text, images }: { text: string; images: string[] }) {
                 {letter}
               </span>
 
-              {/* Image-filled letter on hover */}
+              {/* Image-filled letter on hover/long-press */}
               {isHovered && (
                 <div
                   style={{
@@ -233,7 +284,7 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* BRUT / MUMBAI — full-width stacked watermark with image reveal on hover */}
+      {/* BRUT / MUMBAI — full-width stacked watermark with image reveal on hover (desktop) or long-press (mobile) */}
       <div className="border-t-[3px] border-card/10 w-full overflow-hidden leading-none py-1">
         <div style={{ transform: "scaleX(1.32)", transformOrigin: "center" }}>
           <LetterMaskText text="BRUT" images={FOOTER_IMAGES} />
