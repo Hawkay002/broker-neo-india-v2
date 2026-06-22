@@ -140,33 +140,37 @@ export default function Footer() {
 
       {/* BRUT / MUMBAI — full-width stacked watermark above legal */}
       <div className="border-t-[3px] border-card/10 w-full overflow-hidden leading-none py-1">
-        <p
-          className="select-none font-sans font-extrabold leading-none text-center w-full"
-          style={{
-            fontSize: "clamp(44px, 14vw, 160px)",
-            letterSpacing: "0.18em",
-            WebkitTextStroke: "1.5px rgba(248,245,240,0.38)",
-            WebkitTextFillColor: "transparent",
-            color: "transparent",
-          }}
-          aria-hidden="true"
-        >
-          BRUT
-        </p>
+        <div style={{ transform: "scaleX(1.32)", transformOrigin: "center" }}>
+          <p
+            className="select-none font-sans font-extrabold leading-none text-center w-full"
+            style={{
+              fontSize: "clamp(44px, 14vw, 160px)",
+              letterSpacing: "0.08em",
+              WebkitTextStroke: "1.5px rgba(248,245,240,0.38)",
+              WebkitTextFillColor: "transparent",
+              color: "transparent",
+            }}
+            aria-hidden="true"
+          >
+            BRUT
+          </p>
+        </div>
         <div className="w-full border-t-[2px] border-card/20 my-1" aria-hidden="true" />
-        <p
-          className="select-none font-sans font-extrabold leading-none text-center w-full"
-          style={{
-            fontSize: "clamp(44px, 14vw, 160px)",
-            letterSpacing: "0.18em",
-            WebkitTextStroke: "1.5px rgba(248,245,240,0.38)",
-            WebkitTextFillColor: "transparent",
-            color: "transparent",
-          }}
-          aria-hidden="true"
-        >
-          MUMBAI
-        </p>
+        <div style={{ transform: "scaleX(1.32)", transformOrigin: "center" }}>
+          <p
+            className="select-none font-sans font-extrabold leading-none text-center w-full"
+            style={{
+              fontSize: "clamp(44px, 14vw, 160px)",
+              letterSpacing: "0.08em",
+              WebkitTextStroke: "1.5px rgba(248,245,240,0.38)",
+              WebkitTextFillColor: "transparent",
+              color: "transparent",
+            }}
+            aria-hidden="true"
+          >
+            MUMBAI
+          </p>
+        </div>
       </div>
 
       {/* Legal bar */}
