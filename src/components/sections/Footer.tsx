@@ -133,59 +133,33 @@ function LetterMaskText({ text, images }: { text: string; images: string[] }) {
           const isHovered = hoveredIndex === index;
 
           return (
-            <div
+            <span
               key={index}
-              className="relative cursor-pointer transition-all duration-300 select-none"
+              className="relative cursor-pointer select-none inline-block"
               onMouseEnter={() => handleMouseEnter(index)}
               onMouseLeave={handleMouseLeave}
               onTouchStart={() => handleTouchStart(index)}
               onTouchEnd={handleTouchEnd}
               onTouchMove={handleTouchMove}
               style={{
-                position: "relative",
                 display: "inline-block",
                 userSelect: "none",
+                WebkitUserSelect: "none",
+                // Always apply text stroke with consistent width
+                WebkitTextStroke: "1.5px rgba(248,245,240,0.38)",
+                WebkitTextFillColor: isHovered ? "transparent" : "transparent",
+                color: "transparent",
+                // Apply background image when hovered
+                backgroundImage: isHovered ? `url(${imageUrl})` : "none",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                WebkitBackgroundClip: isHovered ? "text" : "unset",
+                backgroundClip: isHovered ? "text" : "unset",
+                transition: "all 0.3s ease",
               }}
             >
-              {/* Base outlined letter */}
-              <span
-                style={{
-                  WebkitTextStroke: "1.5px rgba(248,245,240,0.38)",
-                  WebkitTextFillColor: "transparent",
-                  color: "transparent",
-                  display: "inline-block",
-                  transition: "all 0.3s ease",
-                  opacity: isHovered ? 0 : 1,
-                }}
-              >
-                {letter}
-              </span>
-
-              {/* Image-filled letter on hover/long-press */}
-              {isHovered && (
-                <div
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    width: "1em",
-                    height: "1em",
-                    backgroundImage: `url(${imageUrl})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    WebkitBackgroundClip: "text",
-                    backgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    color: "transparent",
-                    WebkitTextStroke: "none",
-                    display: "inline-block",
-                    animation: "fadeIn 0.3s ease",
-                  }}
-                >
-                  {letter}
-                </div>
-              )}
-            </div>
+              {letter}
+            </span>
           );
         })}
       </div>
