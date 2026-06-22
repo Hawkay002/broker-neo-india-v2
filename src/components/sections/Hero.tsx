@@ -48,7 +48,7 @@ export default function Hero() {
               className="font-sans font-extrabold leading-[0.88] tracking-[-0.04em] mb-6 w-full text-center md:text-left"
               style={{ fontSize: "clamp(78px, 11vw, 130px)", transform: "scaleX(1.32)", transformOrigin: "center" }}
             >
-              THE REAL DEAL.
+              THE <span style={{ WebkitTextStroke: "2.5px rgba(248,245,240,0.85)", color: "transparent" }}>REAL</span> DEAL.
             </motion.h1>
 
             {/* Sub-copy */}
