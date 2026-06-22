@@ -1,26 +1,41 @@
 import { motion } from "framer-motion";
 import { team } from "@/data";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { ArrowUpRight } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const EASE_SPRING = [0.22, 1, 0.36, 1] as const;
 
 function BrokerCard({ broker, index }: { broker: (typeof team)[0]; index: number }) {
   const [imgLoaded, setImgLoaded] = useState(false);
   const [hovered, setHovered] = useState(false);
+  const isMobile = useIsMobile();
   let pressTimer: ReturnType<typeof setTimeout>;
 
   const handleTouchStart = () => {
     pressTimer = setTimeout(() => {
       setHovered(true);
-    }, 200); // 200ms for "long press" feel on mobile
+    }, 200); // 200ms for \"long press\" feel on mobile
   };
 
   const handleTouchEnd = () => {
     clearTimeout(pressTimer);
-    setHovered(false);
+    // Keep hovered state on mobile after long press
+    if (!isMobile) {
+      setHovered(false);
+    }
   };
+
+  // Auto-reset hover state on mobile after a delay when not actively pressing
+  useEffect(() => {
+    if (isMobile && hovered) {
+      const resetTimer = setTimeout(() => {
+        setHovered(false);
+      }, 3000); // Reset after 3 seconds on mobile
+      return () => clearTimeout(resetTimer);
+    }
+  }, [hovered, isMobile]);
 
   return (
     <motion.div
@@ -28,8 +43,8 @@ function BrokerCard({ broker, index }: { broker: (typeof team)[0]; index: number
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      onHoverStart={() => setHovered(true)}
-      onHoverEnd={() => setHovered(false)}
+      onHoverStart={() => !isMobile && setHovered(true)}
+      onHoverEnd={() => !isMobile && setHovered(false)}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
       className="border-[3px] border-foreground bg-card overflow-hidden flex flex-col bs"
