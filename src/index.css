@@ -363,19 +363,7 @@ body::before {
 @keyframes scroll-x { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 .scroll-x { animation: scroll-x 22s linear infinite; }
 
-/* ── Reduced motion: pause auto-playing loops only ── */
-/* "reduce" means reduce unnecessary motion, NOT kill all interaction.
-   Hover effects, button fills, and scroll reveals are left untouched so
-   the site stays interactive on desktops with the OS setting enabled.   */
-@media (prefers-reduced-motion: reduce) {
-  /* Stop pulsing / looping decorative keyframes */
-  .pulse-ring, .img-placeholder {
-    animation: none !important;
-  }
-  /* Smooth scroll → instant */
-  html { scroll-behavior: auto !important; }
-  /* Marquees (.marquee-l, .marquee-r) are functional content — left running */
-}
+/* prefers-reduced-motion: intentionally not restricted — all animations run regardless */
 
 /* ── MapLibre overrides to match BRUT brutalist style ── */
 .maplibregl-canvas { outline: none; }
