@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Link } from "wouter";
 import { Hero3D } from "@/components/Scene3D";
 
 const fadeUp = { hidden: { opacity: 0, y: 28 }, show: { opacity: 1, y: 0 } };
@@ -17,17 +18,17 @@ export default function Hero() {
         {/* ── Left panel — terracotta "THE REAL DEAL" ── */}
         <div className="relative flex flex-col justify-between px-5 md:px-10 py-8 md:py-12 lg:w-[52%] xl:w-[55%] border-b-[3px] lg:border-b-0 lg:border-r-[3px] border-foreground bg-primary text-primary-foreground overflow-hidden">
           {/* 3D accent — top right of panel */}
-          <div className="absolute top-0 right-0 w-[42%] h-[42%] max-w-[340px] max-h-[340px] pointer-events-none opacity-90">
+          <div className="absolute top-0 right-0 w-[42%] h-[42%] max-w-[340px] max-h-[340px] pointer-events-none opacity-90 overflow-hidden">
             <Hero3D className="w-full h-full" />
           </div>
 
-          {/* Faded "MUMB" watermark — bottom of the panel */}
+          {/* Faded "MUMBAI" watermark — bottom of the panel */}
           <span
             aria-hidden
             className="watermark absolute -bottom-6 md:-bottom-10 left-0 right-0 text-center select-none"
-            style={{ fontSize: "clamp(120px, 24vw, 280px)" }}
+            style={{ fontSize: "clamp(72px, 15vw, 180px)" }}
           >
-            MUMB
+            MUMBAI
           </span>
 
           <motion.div variants={stagger} initial="hidden" animate="show" className="relative z-10">
@@ -113,12 +114,12 @@ export default function Hero() {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 via-foreground/10 to-transparent" />
 
-          {/* Featured listing card — wider */}
+          {/* Featured listing card — cleared from vbar */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.6, duration: 0.5 }}
-            className="absolute bottom-5 left-5 right-5 md:bottom-8 md:left-8 md:right-auto md:w-[400px] bg-foreground text-card p-4 md:p-5 border-2 border-primary"
+            className="absolute bottom-5 left-5 right-5 md:bottom-8 md:left-[56px] md:right-8 bg-foreground text-card p-4 md:p-5 border-2 border-primary"
           >
             <p className="section-label text-primary mb-1.5">Featured Listing</p>
             <p className="font-sans font-bold text-lg leading-tight mb-1">The Worli Sea Face Penthouse</p>
@@ -132,12 +133,12 @@ export default function Hero() {
             </div>
             <div className="flex items-center justify-between">
               <span className="font-mono font-bold text-lg text-primary">₹8,50,000<span className="text-card/40 font-normal text-xs">/mo</span></span>
-              <a
-                href="/listings/worli-sea-face-penthouse"
+              <Link
+                to="/listings/worli-sea-face-penthouse"
                 className="btn-fill-dark font-mono text-[10px] uppercase tracking-[0.2em] font-bold bg-primary text-primary-foreground px-3 py-1.5 border border-primary-foreground/20 cursor-pointer inline-block"
               >
                 View →
-              </a>
+              </Link>
             </div>
           </motion.div>
 
