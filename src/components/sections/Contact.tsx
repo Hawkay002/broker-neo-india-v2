@@ -28,7 +28,7 @@ export default function Contact() {
       </div>
 
       <div className="flex flex-col lg:flex-row">
-        {/* Left — Info & Map */}
+        {/* Left — Info */}
         <div className="lg:w-[45%] border-b-[3px] lg:border-b-0 lg:border-r-[3px] border-foreground flex flex-col">
           <div className="px-5 md:px-10 py-8 md:py-12 flex-1">
             {/* Big headline — clip-reveal animation */}
@@ -78,7 +78,6 @@ export default function Contact() {
             </Reveal>
           </div>
 
-          <OfficeMap />
         </div>
 
         {/* Right — Form with reveal animation */}
@@ -208,6 +207,9 @@ export default function Contact() {
           </RevealGroup>
         </div>
       </div>
+
+      {/* Full-width map — spans entire section width on all screen sizes */}
+      <OfficeMap />
     </section>
   );
 }
