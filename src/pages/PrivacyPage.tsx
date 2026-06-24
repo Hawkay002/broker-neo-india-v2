@@ -2,6 +2,7 @@ import Navbar from "@/components/sections/Navbar";
 import Footer from "@/components/sections/Footer";
 import PageHero from "@/components/PageHero";
 import { Reveal, RevealGroup } from "@/components/Reveal";
+import SEO from "@/components/SEO";
 
 const LAST_UPDATED = "1 June 2025";
 
@@ -58,7 +59,12 @@ const SECTIONS = [
 
 export default function PrivacyPage() {
   return (
-    <div className="pt-[68px]">
+    <div className="pt-20">
+      <SEO
+        title="Privacy Policy"
+        description="BRUT Realty's Privacy Policy — how we collect, use, and protect your personal data under the Digital Personal Data Protection Act, 2023."
+        path="/privacy"
+      />
       <Navbar />
       <main className="bg-background min-h-screen page-enter">
         <PageHero

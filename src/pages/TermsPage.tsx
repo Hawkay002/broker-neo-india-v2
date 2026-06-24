@@ -2,6 +2,7 @@ import Navbar from "@/components/sections/Navbar";
 import Footer from "@/components/sections/Footer";
 import PageHero from "@/components/PageHero";
 import { Reveal, RevealGroup } from "@/components/Reveal";
+import SEO from "@/components/SEO";
 
 const LAST_UPDATED = "1 June 2025";
 
@@ -70,7 +71,12 @@ const SECTIONS = [
 
 export default function TermsPage() {
   return (
-    <div className="pt-[68px]">
+    <div className="pt-20">
+      <SEO
+        title="Terms of Service"
+        description="BRUT Realty's Terms of Service — governing use of our website and brokerage services, compliant with Indian Contract Act and RERA."
+        path="/terms"
+      />
       <Navbar />
       <main className="bg-background min-h-screen page-enter">
         <PageHero

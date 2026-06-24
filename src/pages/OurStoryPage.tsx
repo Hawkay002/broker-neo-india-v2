@@ -2,6 +2,7 @@ import Navbar from "@/components/sections/Navbar";
 import Footer from "@/components/sections/Footer";
 import PageHero from "@/components/PageHero";
 import { Reveal, RevealGroup } from "@/components/Reveal";
+import SEO from "@/components/SEO";
 
 const TIMELINE = [
   {
@@ -50,7 +51,12 @@ const VALUES = [
 
 export default function OurStoryPage() {
   return (
-    <div className="pt-[68px]">
+    <div className="pt-20">
+      <SEO
+        title="Our Story"
+        description="How one frustrated buyer built Mumbai's most direct real estate firm. From 2009 to now — the BRUT Realty story."
+        path="/our-story"
+      />
       <Navbar />
       <main className="bg-background min-h-screen page-enter">
         <PageHero

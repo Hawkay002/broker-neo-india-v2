@@ -7,6 +7,9 @@ import { useParams, Link } from "wouter";
 import { useState } from "react";
 import NotFound from "@/pages/not-found";
 import { ArrowLeft, ArrowUpRight, Bed, Bath, Maximize, Check, MapPin, Calendar, Phone } from "lucide-react";
+import BookingModal from "@/components/BookingModal";
+import VirtualTour from "@/components/VirtualTour";
+import SEO from "@/components/SEO";
 
 function ListingGallery({ images, name }: { images: string[]; name: string }) {
   const [active, setActive] = useState(0);
@@ -51,6 +54,8 @@ function ListingGallery({ images, name }: { images: string[]; name: string }) {
 export default function ListingDetailPage() {
   const { slug } = useParams<{ slug: string }>();
   const listing: Listing | undefined = listings.find((l) => l.slug === slug);
+  const [bookingOpen, setBookingOpen] = useState(false);
+  const [tourOpen, setTourOpen] = useState(false);
   if (!listing) {
     return <NotFound />;
   }
@@ -60,7 +65,13 @@ export default function ListingDetailPage() {
   const relatedList = related.length ? related : fallbackRelated;
 
   return (
-    <div className="pt-[68px]">
+    <div className="pt-20">
+      <SEO
+        title={listing.name}
+        description={listing.tagline}
+        path={`/listings/${listing.slug}`}
+        image={listing.gallery[0] || listing.image}
+      />
       <Navbar />
       <main className="bg-background min-h-screen page-enter">
         {/* Breadcrumb / back */}
@@ -144,6 +155,43 @@ export default function ListingDetailPage() {
           </RevealGroup>
         </section>
 
+        {/* Virtual Tour */}
+        <section className="border-b-[3px] border-foreground px-5 md:px-10 py-10 md:py-14 bg-foreground text-card">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
+            <div>
+              <h2 className="font-sans font-extrabold text-2xl tracking-tight">Virtual Walkthrough</h2>
+              <p className="font-sans text-card/60 mt-1 max-w-md">Explore a 3D representation of a similar BRUT property.</p>
+            </div>
+            <button
+              onClick={() => setTourOpen(true)}
+              className="btn-fill-dark bg-primary text-primary-foreground px-5 py-3 font-bold border-2 border-primary-foreground/20 bs-cream bs-cream-hover uppercase tracking-widest text-xs cursor-pointer inline-flex items-center gap-2"
+            >
+              Open Fullscreen 3D Tour
+            </button>
+          </div>
+          <div className="h-[400px] border-2 border-card/20 overflow-hidden">
+            <VirtualTour accentColor="#c6633f" />
+          </div>
+        </section>
+
+        {/* 3D Tour Modal */}
+        {tourOpen && (
+          <div className="fixed inset-0 z-50 bg-foreground/95 flex flex-col">
+            <div className="flex items-center justify-between px-5 py-3 border-b border-card/20">
+              <p className="section-label text-card/60">Virtual Walkthrough</p>
+              <button
+                onClick={() => setTourOpen(false)}
+                className="text-card hover:text-primary transition-colors cursor-pointer font-mono text-xs uppercase tracking-wider"
+              >
+                Close [Esc]
+              </button>
+            </div>
+            <div className="flex-1">
+              <VirtualTour accentColor="#c6633f" />
+            </div>
+          </div>
+        )}
+
         {/* Amenities */}
         <section className="border-b-[3px] border-foreground px-5 md:px-10 py-10 md:py-14 bg-card">
           <h2 className="font-sans font-extrabold text-2xl tracking-tight mb-6">Building Amenities</h2>
@@ -170,9 +218,12 @@ export default function ListingDetailPage() {
             <a href="tel:+912245678900" className="btn-fill-primary-on-dark bg-foreground text-card px-6 py-3.5 font-bold border-2 border-card/30 bs-cream bs-cream-hover uppercase tracking-widest text-xs cursor-pointer inline-flex items-center gap-2">
               <Phone className="w-4 h-4" /> Call Now
             </a>
-            <a href="/#contact" className="btn-fill-dark bg-primary text-primary-foreground px-6 py-3.5 font-bold border-2 border-primary-foreground/20 uppercase tracking-widest text-xs cursor-pointer inline-flex items-center gap-2">
+            <button
+              onClick={() => setBookingOpen(true)}
+              className="btn-fill-dark bg-primary text-primary-foreground px-6 py-3.5 font-bold border-2 border-primary-foreground/20 uppercase tracking-widest text-xs cursor-pointer inline-flex items-center gap-2"
+            >
               Book a Viewing <ArrowUpRight className="w-4 h-4" />
-            </a>
+            </button>
           </div>
         </section>
 
@@ -196,6 +247,11 @@ export default function ListingDetailPage() {
         </section>
       </main>
       <Footer />
+      <BookingModal
+        open={bookingOpen}
+        onClose={() => setBookingOpen(false)}
+        propertyContext={`Interested in: ${listing.name} (${listing.neighborhood})`}
+      />
     </div>
   );
 }

@@ -5,6 +5,7 @@ import { Reveal, RevealGroup } from "@/components/Reveal";
 import { team } from "@/data";
 import { Phone, Mail, MapPin, Award, Briefcase } from "lucide-react";
 import { useState } from "react";
+import SEO from "@/components/SEO";
 
 function TeamCard({ member, index }: { member: (typeof team)[0]; index: number }) {
   const [imgLoaded, setImgLoaded] = useState(false);
@@ -73,7 +74,12 @@ function TeamCard({ member, index }: { member: (typeof team)[0]; index: number }
 
 export default function TeamPage() {
   return (
-    <div className="pt-[68px]">
+    <div className="pt-20">
+      <SEO
+        title="Our Team"
+        description="Meet Mumbai's most specialist real estate brokers. Each BRUT broker owns one micro-market — Worli, Bandra, Juhu, or Malabar Hill."
+        path="/team"
+      />
       <Navbar />
       <main className="bg-background min-h-screen page-enter">
         <PageHero

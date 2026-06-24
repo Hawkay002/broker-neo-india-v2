@@ -6,6 +6,7 @@ import { services, type Service } from "@/data";
 import { useParams, Link } from "wouter";
 import { Check, ArrowRight, ArrowUpRight, Phone } from "lucide-react";
 import NotFound from "@/pages/not-found";
+import SEO from "@/components/SEO";
 
 export default function ServicePage() {
   const { slug } = useParams<{ slug: string }>();
@@ -17,7 +18,13 @@ export default function ServicePage() {
   const otherServices = services.filter((s) => s.slug !== slug);
 
   return (
-    <div className="pt-[68px]">
+    <div className="pt-20">
+      <SEO
+        title={service.name}
+        description={service.short}
+        path={`/services/${service.slug}`}
+        image={service.image}
+      />
       <Navbar />
       <main className="bg-background min-h-screen page-enter">
         <PageHero

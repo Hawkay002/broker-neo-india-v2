@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import Navbar from "@/components/sections/Navbar";
 import Footer from "@/components/sections/Footer";
+import SEO from "@/components/SEO";
 
 const COVERAGE = [
   { outlet: "Economic Times", date: "March 2024", headline: "How BRUT Realty is disrupting Mumbai's luxury property market with a radical no-BS approach", type: "Feature" },
@@ -12,7 +13,12 @@ const COVERAGE = [
 
 export default function PressPage() {
   return (
-    <div className="pt-[68px]">
+    <div className="pt-20">
+      <SEO
+        title="Press & Media"
+        description="BRUT Realty in the news — Economic Times, Mumbai Mirror, The Hindu BusinessLine, Hindustan Times, and Mint."
+        path="/press"
+      />
       <Navbar />
       <main className="bg-background min-h-screen">
         <section className="border-b-[3px] border-foreground">

@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import Navbar from "@/components/sections/Navbar";
 import Footer from "@/components/sections/Footer";
+import SEO from "@/components/SEO";
 
 const VALUES = [
   { title: "Radical Honesty", body: "We tell you if a property isn't right for you — even if we lose the deal. Long-term trust over short-term commissions." },
@@ -18,7 +19,12 @@ const TEAM_STATS = [
 
 export default function AboutPage() {
   return (
-    <div className="pt-[68px]">
+    <div className="pt-20">
+      <SEO
+        title="About"
+        description="BRUT Realty — Mumbai's most direct real estate firm. Radical honesty, zero time-waste, expert-first approach. Founded in 2009, ₹2,400 Cr+ in transaction volume."
+        path="/about"
+      />
       <Navbar />
       <main className="bg-background min-h-screen">
         {/* Hero */}

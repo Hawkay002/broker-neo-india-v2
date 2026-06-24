@@ -6,6 +6,7 @@ import { listings, FILTERS } from "@/data";
 import { useState } from "react";
 import { Link } from "wouter";
 import { ArrowUpRight, Bed, Bath, Maximize, Search } from "lucide-react";
+import SEO from "@/components/SEO";
 
 export default function AllListingsPage() {
   const [active, setActive] = useState("All");
@@ -21,7 +22,12 @@ export default function AllListingsPage() {
     : filtered;
 
   return (
-    <div className="pt-[68px]">
+    <div className="pt-20">
+      <SEO
+        title="All Listings"
+        description="Browse premium properties for rent and sale across Mumbai's finest neighbourhoods — Worli, Bandra, Juhu, Malabar Hill and beyond."
+        path="/listings"
+      />
       <Navbar />
       <main className="bg-background min-h-screen page-enter">
         <PageHero

@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import Navbar from "@/components/sections/Navbar";
 import Footer from "@/components/sections/Footer";
+import SEO from "@/components/SEO";
 
 const ROLES = [
   {
@@ -34,7 +35,12 @@ const PERKS = [
 
 export default function CareersPage() {
   return (
-    <div className="pt-[68px]">
+    <div className="pt-20">
+      <SEO
+        title="Careers"
+        description="Join Mumbai's most direct real estate firm. Open positions: Senior Broker, Client Experience Associate, and Junior Broker."
+        path="/careers"
+      />
       <Navbar />
       <main className="bg-background min-h-screen">
         {/* Hero */}

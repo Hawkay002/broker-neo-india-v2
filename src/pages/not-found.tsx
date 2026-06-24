@@ -1,9 +1,15 @@
 import { Link } from "wouter";
 import Navbar from "@/components/sections/Navbar";
+import SEO from "@/components/SEO";
 
 export default function NotFound() {
   return (
-    <div className="pt-[68px]">
+    <div className="pt-20">
+      <SEO
+        title="Page Not Found"
+        description="The page you're looking for doesn't exist. Let's get you back to finding your perfect property."
+        path="/404"
+      />
       <Navbar />
       <div className="min-h-[80vh] bg-background flex flex-col items-center justify-center px-5 text-center">
         <p className="font-mono font-bold text-primary text-sm tracking-[0.3em] uppercase mb-4">404</p>

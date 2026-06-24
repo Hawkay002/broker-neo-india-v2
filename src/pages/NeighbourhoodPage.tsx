@@ -6,6 +6,7 @@ import { neighbourhoods, listings, type Neighbourhood } from "@/data";
 import { useParams, Link } from "wouter";
 import { ArrowUpRight, MapPin, Tag, Building2, Phone } from "lucide-react";
 import NotFound from "@/pages/not-found";
+import SEO from "@/components/SEO";
 
 export default function NeighbourhoodPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -18,7 +19,13 @@ export default function NeighbourhoodPage() {
   const otherHoods = neighbourhoods.filter((n) => n.slug !== slug).slice(0, 3);
 
   return (
-    <div className="pt-[68px]">
+    <div className="pt-20">
+      <SEO
+        title={hood.name}
+        description={hood.blurb}
+        path={`/neighbourhoods/${hood.slug}`}
+        image={hood.image}
+      />
       <Navbar />
       <main className="bg-background min-h-screen page-enter">
         <PageHero

@@ -2,6 +2,7 @@ import Navbar from "@/components/sections/Navbar";
 import Footer from "@/components/sections/Footer";
 import PageHero from "@/components/PageHero";
 import { Reveal, RevealGroup } from "@/components/Reveal";
+import SEO from "@/components/SEO";
 
 const FEATURES = [
   { title: "Keyboard Navigation", body: "All interactive elements are accessible via keyboard. Use Tab to move between elements and Enter/Space to activate." },
@@ -14,7 +15,12 @@ const FEATURES = [
 
 export default function AccessibilityPage() {
   return (
-    <div className="pt-[68px]">
+    <div className="pt-20">
+      <SEO
+        title="Accessibility Statement"
+        description="BRUT Realty's commitment to ensuring brutrealty.in is accessible to all users, regardless of ability. WCAG 2.1 AA compliant."
+        path="/accessibility"
+      />
       <Navbar />
       <main className="bg-background min-h-screen page-enter">
         <PageHero

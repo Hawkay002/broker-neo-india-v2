@@ -10,6 +10,7 @@ import Testimonials from "@/components/sections/Testimonials";
 import Contact from "@/components/sections/Contact";
 import Footer from "@/components/sections/Footer";
 import Loader from "@/components/Loader";
+import SEO from "@/components/SEO";
 
 export default function Home() {
   const [loaderDone, setLoaderDone] = useState(false);
@@ -21,9 +22,14 @@ export default function Home() {
 
   return (
     <>
+      <SEO
+        title="BRUT Realty — Mumbai's Premier Real Estate Agency"
+        description="Premium properties in Mumbai's finest neighbourhoods. Worli, Bandra, Juhu, Malabar Hill and beyond. No fluff, just results."
+        path="/"
+      />
       {!loaderDone && <Loader />}
       {/* Offset for fixed navbar */}
-      <div className="pt-[68px]">
+      <div className="pt-20">
         <Navbar />
         <main>
           <Hero />
