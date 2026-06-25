@@ -137,12 +137,12 @@ export default function Hero() {
             </div>
             <div className="flex items-center justify-between">
               <span className="font-mono font-bold text-lg text-primary">₹8,50,000<span className="text-card/40 font-normal text-xs">/mo</span></span>
-              <Link
-                to="/listings/worli-sea-face-penthouse"
-                className="btn-fill-dark font-mono text-[10px] uppercase tracking-[0.2em] font-bold bg-primary text-primary-foreground px-3 py-1.5 border border-primary-foreground/20 cursor-pointer inline-block"
-              >
-                View →
-              </Link>
+                <Link
+                  to="/featured/worli-sea-face-penthouse"
+                  className="btn-fill-dark font-mono text-[10px] uppercase tracking-[0.2em] font-bold bg-primary text-primary-foreground px-3 py-1.5 border border-primary-foreground/20 cursor-pointer inline-block"
+                >
+                  View →
+                </Link>
             </div>
           </motion.div>
 

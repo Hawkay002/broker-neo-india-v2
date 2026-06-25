@@ -18,6 +18,7 @@ import TermsPage from "@/pages/TermsPage";
 import AccessibilityPage from "@/pages/AccessibilityPage";
 import AllListingsPage from "@/pages/AllListingsPage";
 import ListingDetailPage from "@/pages/ListingDetailPage";
+import FeaturedListingPage from "@/pages/FeaturedListingPage";
 import ServicePage from "@/pages/ServicePage";
 import NeighbourhoodPage from "@/pages/NeighbourhoodPage";
 import TeamPage from "@/pages/TeamPage";
@@ -53,7 +54,7 @@ function Router() {
           {/* Listings */}
           <Route path="/listings" component={(props) => <PageTransition><AllListingsPage {...props} /></PageTransition>} />
           <Route path="/listings/:slug" component={(props) => <PageTransition><ListingDetailPage {...props} /></PageTransition>} />
-  
+          <Route path="/featured/:slug" component={(props) => <PageTransition><FeaturedListingPage {...props} /></PageTransition>} />
           {/* Services */}
           <Route path="/services/:slug" component={(props) => <PageTransition><ServicePage {...props} /></PageTransition>} />
   

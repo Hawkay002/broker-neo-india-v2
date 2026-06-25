@@ -16,8 +16,16 @@ export default function Home() {
   const [loaderDone, setLoaderDone] = useState(false);
 
   useEffect(() => {
-    const t = setTimeout(() => setLoaderDone(true), 2200);
-    return () => clearTimeout(t);
+    const hasSeenLoader = sessionStorage.getItem("hasSeenLoader");
+    if (hasSeenLoader) {
+      setLoaderDone(true);
+    } else {
+      const t = setTimeout(() => {
+        setLoaderDone(true);
+        sessionStorage.setItem("hasSeenLoader", "true");
+      }, 2200);
+      return () => clearTimeout(t);
+    }
   }, []);
 
   return (

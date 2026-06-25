@@ -21,16 +21,11 @@ function TeamCard({ member, index }: { member: (typeof team)[0]; index: number }
             onLoad={() => setImgLoaded(true)}
             className={`w-full h-full object-cover object-top transition-all duration-500 ${
               imgLoaded ? "opacity-100" : "opacity-0"
-            } grayscale group-hover:grayscale-0 group-hover:scale-105`}
+            } group-hover:scale-105`}
           />
           {/* Experience badge */}
           <div className="absolute top-3 right-3 bg-foreground text-card font-mono text-[9px] font-bold px-2 py-1 uppercase tracking-[0.18em]">
             {member.experience}
-          </div>
-          {/* Specialty strip */}
-          <div className="absolute bottom-0 left-0 right-0 bg-primary text-primary-foreground px-4 py-3 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-            <p className="section-label text-primary-foreground/70 mb-0.5">Specialisation</p>
-            <p className="font-bold text-sm">{member.specialization}</p>
           </div>
         </div>
 
@@ -39,6 +34,7 @@ function TeamCard({ member, index }: { member: (typeof team)[0]; index: number }
           <div>
             <p className="section-label text-muted-foreground mb-0.5">{member.title}</p>
             <h3 className="font-sans font-bold text-lg leading-tight">{member.name}</h3>
+            <p className="font-mono text-[10px] uppercase tracking-wider text-primary font-bold mt-1">{member.specialization}</p>
           </div>
 
           <p className="font-sans text-sm text-muted-foreground leading-relaxed">{member.bio}</p>

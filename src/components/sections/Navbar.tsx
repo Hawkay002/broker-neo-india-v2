@@ -1,6 +1,7 @@
 import { Menu, X } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
+import { motion, AnimatePresence } from "framer-motion";
 import Magnetic from "@/components/Magnetic";
 
 // Section anchors scroll within the home page.
@@ -135,47 +136,62 @@ export default function Navbar() {
       </header>
 
       {/* Mobile fullscreen menu */}
-      {open && (
-        <div className="fixed inset-0 z-40 bg-foreground flex flex-col pt-[68px]" style={{ overscrollBehavior: "contain" }}>
-          <nav className="flex flex-col px-8 pt-10 gap-0 flex-1 overflow-y-auto">
-            {NAV_ITEMS.map((item, i) =>
-              item.type === "page" ? (
-                <Link
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, x: "100%" }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: "100%" }}
+            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+            className="fixed inset-0 z-40 bg-foreground flex flex-col pt-[68px]"
+            style={{ overscrollBehavior: "contain" }}
+          >
+            <nav className="flex flex-col px-8 pt-10 gap-0 flex-1 overflow-y-auto">
+              {NAV_ITEMS.map((item, i) => (
+                <motion.div
                   key={item.label}
-                  to={item.href}
-                  className="font-sans font-extrabold text-[clamp(36px,10vw,52px)] uppercase text-card hover:text-primary transition-colors py-3 border-b border-card/10"
-                  style={{ transitionDelay: `${i * 30}ms` }}
-                  onClick={() => setOpen(false)}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 + i * 0.05 }}
                 >
-                  {item.label}
-                </Link>
-              ) : (
-                <a
-                  key={item.label}
-                  href={resolveHref(item)}
-                  className="font-sans font-extrabold text-[clamp(36px,10vw,52px)] uppercase text-card hover:text-primary transition-colors py-3 border-b border-card/10"
-                  style={{ transitionDelay: `${i * 30}ms` }}
-                  onClick={() => setOpen(false)}
-                >
-                  {item.label}
-                </a>
-              )
-            )}
-            <a
-              href={isHome ? "#contact" : "/#contact"}
-              className="btn-fill-dark mt-8 bg-primary text-primary-foreground px-6 py-4 font-bold border-2 border-primary-foreground/20 uppercase tracking-widest text-sm text-left inline-block cursor-pointer"
-              onClick={() => setOpen(false)}
-            >
-              Book a Call →
-            </a>
-          </nav>
+                  {item.type === "page" ? (
+                    <Link
+                      to={item.href}
+                      className="block font-sans font-extrabold text-[clamp(36px,10vw,52px)] uppercase text-card hover:text-primary transition-colors py-3 border-b border-card/10"
+                      onClick={() => setOpen(false)}
+                    >
+                      {item.label}
+                    </Link>
+                  ) : (
+                    <a
+                      href={resolveHref(item)}
+                      className="block font-sans font-extrabold text-[clamp(36px,10vw,52px)] uppercase text-card hover:text-primary transition-colors py-3 border-b border-card/10"
+                      onClick={() => setOpen(false)}
+                    >
+                      {item.label}
+                    </a>
+                  )}
+                </motion.div>
+              ))}
+              <motion.a
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 + NAV_ITEMS.length * 0.05 }}
+                href={isHome ? "#contact" : "/#contact"}
+                className="btn-fill-dark mt-8 bg-primary text-primary-foreground px-6 py-4 font-bold border-2 border-primary-foreground/20 uppercase tracking-widest text-sm text-left inline-block cursor-pointer"
+                onClick={() => setOpen(false)}
+              >
+                Book a Call →
+              </motion.a>
+            </nav>
 
-          <div className="px-8 py-5 border-t border-card/10 flex items-center justify-between flex-shrink-0">
-            <span className="section-label text-card/25">Est. 2009 · Mumbai</span>
-            <span className="section-label text-primary">RERA Registered</span>
-          </div>
-        </div>
-      )}
+            <div className="px-8 py-5 border-t border-card/10 flex items-center justify-between flex-shrink-0">
+              <span className="section-label text-card/25">Est. 2009 · Mumbai</span>
+              <span className="section-label text-primary">RERA Registered</span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }

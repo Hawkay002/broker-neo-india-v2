@@ -79,12 +79,6 @@ export default function Listings() {
           <span className="section-label text-muted-foreground">02 /</span>
           <h2 className="font-sans font-extrabold text-2xl md:text-3xl tracking-tight">Current Listings</h2>
         </div>
-        <Link
-          to="/services/off-market-deals"
-          className="btn-fill-primary bg-transparent text-foreground border-2 border-foreground/30 px-4 py-2 font-mono text-[10px] uppercase tracking-[0.2em] font-bold cursor-pointer inline-flex items-center gap-1.5 self-start md:self-auto"
-        >
-          <Lock className="w-3 h-3" /> Off-Market Access →
-        </Link>
       </div>
 
       {/* Filters */}
