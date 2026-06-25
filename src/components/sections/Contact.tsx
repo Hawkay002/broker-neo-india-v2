@@ -82,7 +82,9 @@ export default function Contact() {
 
         {/* Right — Form with reveal animation */}
         <div className="lg:flex-1 px-5 md:px-10 py-8 md:py-12 relative">
-          <OfficeMap className="lg:hidden mb-8" />
+          <div className="lg:hidden mb-8">
+            <OfficeMap />
+          </div>
           <div className="absolute top-4 right-4 w-5 h-5 border-t-2 border-r-2 border-foreground/20 hidden md:block pointer-events-none" />
           <div className="absolute bottom-4 left-4 md:left-10 w-5 h-5 border-b-2 border-l-2 border-foreground/20 hidden md:block pointer-events-none" />
 
